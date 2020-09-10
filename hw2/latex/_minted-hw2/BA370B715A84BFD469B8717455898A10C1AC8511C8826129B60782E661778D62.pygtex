@@ -1,0 +1,104 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k+kn}{import} \PYG{n+nn}{torch}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{from} \PYG{n+nn}{mnist} \PYG{k+kn}{import} \PYG{n}{MNIST}
+
+\PYG{k}{def} \PYG{n+nf}{load\PYGZus{}data}\PYG{p}{():}
+	\PYG{n}{mndata} \PYG{o}{=} \PYG{n}{MNIST}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}python\PYGZhy{}mnist/data/\PYGZsq{}}\PYG{p}{)}
+	\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{labels\PYGZus{}train} \PYG{o}{=} \PYG{n+nb}{map}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{,} \PYG{n}{mndata}\PYG{o}{.}\PYG{n}{load\PYGZus{}training}\PYG{p}{())}
+	\PYG{n}{X\PYGZus{}test}\PYG{p}{,} \PYG{n}{labels\PYGZus{}test} \PYG{o}{=} \PYG{n+nb}{map}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{,} \PYG{n}{mndata}\PYG{o}{.}\PYG{n}{load\PYGZus{}testing}\PYG{p}{())}
+	\PYG{n}{X\PYGZus{}train} \PYG{o}{=} \PYG{n}{X\PYGZus{}train} \PYG{o}{/} \PYG{l+m+mf}{255.0}
+	\PYG{n}{X\PYGZus{}test} \PYG{o}{=} \PYG{n}{X\PYGZus{}test} \PYG{o}{/} \PYG{l+m+mf}{255.0}
+	\PYG{k}{return} \PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{labels\PYGZus{}train}\PYG{p}{,} \PYG{n}{X\PYGZus{}test}\PYG{p}{,} \PYG{n}{labels\PYGZus{}test}
+\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{,} \PYG{n}{X\PYGZus{}test}\PYG{p}{,} \PYG{n}{y\PYGZus{}test} \PYG{o}{=} \PYG{n}{load\PYGZus{}data}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} One hot encoding}
+\PYG{k}{def} \PYG{n+nf}{one\PYGZus{}hot}\PYG{p}{(}\PYG{n}{y\PYGZus{}train\PYGZus{}}\PYG{p}{,} \PYG{n}{m}\PYG{p}{):}
+	\PYG{n}{n} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{y\PYGZus{}train\PYGZus{}}\PYG{p}{)}
+	\PYG{n}{reformed\PYGZus{}tensor} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,} \PYG{n}{m}\PYG{p}{)}
+	\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{n}\PYG{p}{):}
+		\PYG{n}{index} \PYG{o}{=} \PYG{n}{y\PYGZus{}train\PYGZus{}}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+		\PYG{n}{reformed\PYGZus{}tensor}\PYG{p}{[}\PYG{n}{i}\PYG{p}{][}\PYG{n}{index}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{1}
+	\PYG{k}{return} \PYG{n}{reformed\PYGZus{}tensor}
+
+
+\PYG{c+c1}{\PYGZsh{} convert to tensor}
+\PYG{n}{X\PYGZus{}train\PYGZus{}} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{tensor}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{dtype}\PYG{o}{=}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{double}\PYG{p}{)}
+\PYG{n}{y\PYGZus{}train\PYGZus{}} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{tensor}\PYG{p}{(}\PYG{n}{y\PYGZus{}train}\PYG{p}{,} \PYG{n}{dtype}\PYG{o}{=}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{int64}\PYG{p}{)}
+
+\PYG{n}{X\PYGZus{}test\PYGZus{}} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{tensor}\PYG{p}{(}\PYG{n}{X\PYGZus{}test}\PYG{p}{,} \PYG{n}{dtype}\PYG{o}{=}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{double}\PYG{p}{)}
+\PYG{n}{y\PYGZus{}test\PYGZus{}} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{tensor}\PYG{p}{(}\PYG{n}{y\PYGZus{}test}\PYG{p}{,} \PYG{n}{dtype}\PYG{o}{=}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{int64}\PYG{p}{)}
+
+\PYG{n}{W} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{l+m+mi}{784}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{n}{requires\PYGZus{}grad}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{dtype}\PYG{o}{=}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{double}\PYG{p}{)}
+\PYG{n}{W\PYGZus{}mse} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{l+m+mi}{784}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{n}{requires\PYGZus{}grad}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{,} \PYG{n}{dtype}\PYG{o}{=}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{double}\PYG{p}{)}
+\PYG{n}{step\PYGZus{}size} \PYG{o}{=} \PYG{l+m+mf}{0.01}
+\PYG{n}{epochs} \PYG{o}{=} \PYG{l+m+mi}{100}
+\PYG{n}{train\PYGZus{}accuracy\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{test\PYGZus{}accuracy\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{train\PYGZus{}accuracy\PYGZus{}list\PYGZus{}mse} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{test\PYGZus{}accuracy\PYGZus{}list\PYGZus{}mse} \PYG{o}{=} \PYG{p}{[]}
+
+\PYG{n}{epochs} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{epochs}\PYG{p}{))}
+\PYG{k}{for} \PYG{n}{epoch} \PYG{o+ow}{in} \PYG{n}{epochs}\PYG{p}{:}
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Epoch: \PYGZdq{}}\PYG{p}{,} \PYG{n}{epoch}\PYG{p}{)}
+	\PYG{n}{y\PYGZus{}hat} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{matmul}\PYG{p}{(}\PYG{n}{X\PYGZus{}train\PYGZus{}}\PYG{p}{,} \PYG{n}{W}\PYG{p}{)}
+	\PYG{n}{y\PYGZus{}hat\PYGZus{}mse} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{matmul}\PYG{p}{(}\PYG{n}{X\PYGZus{}train\PYGZus{}}\PYG{p}{,} \PYG{n}{W\PYGZus{}mse}\PYG{p}{)}
+	\PYG{c+c1}{\PYGZsh{} cross entropy combines softmax calculation with NLLLoss}
+	\PYG{n}{loss} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{cross\PYGZus{}entropy}\PYG{p}{(}\PYG{n}{y\PYGZus{}hat}\PYG{p}{,} \PYG{n}{y\PYGZus{}train\PYGZus{}}\PYG{p}{)}
+	\PYG{n}{loss\PYGZus{}mse} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{mse\PYGZus{}loss}\PYG{p}{(}\PYG{n}{y\PYGZus{}hat\PYGZus{}mse}\PYG{p}{,} \PYG{n}{one\PYGZus{}hot}\PYG{p}{(}\PYG{n}{y\PYGZus{}train\PYGZus{}}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{)}\PYG{o}{.}\PYG{n}{double}\PYG{p}{())}
+	\PYG{c+c1}{\PYGZsh{} computes derivatives of the loss with respect to W}
+	\PYG{n}{loss}\PYG{o}{.}\PYG{n}{backward}\PYG{p}{()}
+	\PYG{n}{loss\PYGZus{}mse}\PYG{o}{.}\PYG{n}{backward}\PYG{p}{()}
+	\PYG{c+c1}{\PYGZsh{} gradient descent update}
+	\PYG{n}{W}\PYG{o}{.}\PYG{n}{data} \PYG{o}{=} \PYG{n}{W}\PYG{o}{.}\PYG{n}{data} \PYG{o}{\PYGZhy{}} \PYG{n}{step\PYGZus{}size} \PYG{o}{*} \PYG{n}{W}\PYG{o}{.}\PYG{n}{grad}
+	\PYG{n}{W\PYGZus{}mse}\PYG{o}{.}\PYG{n}{data} \PYG{o}{=} \PYG{n}{W\PYGZus{}mse}\PYG{o}{.}\PYG{n}{data} \PYG{o}{\PYGZhy{}} \PYG{n}{step\PYGZus{}size} \PYG{o}{*} \PYG{n}{W\PYGZus{}mse}\PYG{o}{.}\PYG{n}{grad}
+	\PYG{c+c1}{\PYGZsh{} .backward() accumulates gradients into W.grad instead}
+	\PYG{c+c1}{\PYGZsh{} of overwriting, so we need to zero out the weights}
+	
+	\PYG{c+c1}{\PYGZsh{} Cross Entropy}
+	\PYG{n}{max\PYGZus{}index\PYGZus{}train} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{max}\PYG{p}{((}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{matmul}\PYG{p}{(}\PYG{n}{X\PYGZus{}train\PYGZus{}}\PYG{p}{,} \PYG{n}{W}\PYG{p}{)),} \PYG{n}{dim}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{indices}\PYG{o}{.}\PYG{n}{numpy}\PYG{p}{()}
+	\PYG{n}{num\PYGZus{}corrected\PYGZus{}prediction\PYGZus{}train} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{max\PYGZus{}index\PYGZus{}train} \PYG{o}{==} \PYG{n}{y\PYGZus{}train}\PYG{p}{)}
+	\PYG{n}{train\PYGZus{}accu} \PYG{o}{=} \PYG{n}{num\PYGZus{}corrected\PYGZus{}prediction\PYGZus{}train} \PYG{o}{/} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{y\PYGZus{}train}\PYG{p}{)}
+	\PYG{n}{train\PYGZus{}accuracy\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{train\PYGZus{}accu}\PYG{p}{)}
+	
+	\PYG{n}{max\PYGZus{}index\PYGZus{}test} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{max}\PYG{p}{((}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{matmul}\PYG{p}{(}\PYG{n}{X\PYGZus{}test\PYGZus{}}\PYG{p}{,} \PYG{n}{W}\PYG{p}{)),} \PYG{n}{dim}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{indices}\PYG{o}{.}\PYG{n}{numpy}\PYG{p}{()}
+	\PYG{n}{num\PYGZus{}corrected\PYGZus{}prediction\PYGZus{}test} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{max\PYGZus{}index\PYGZus{}test} \PYG{o}{==} \PYG{n}{y\PYGZus{}test}\PYG{p}{)}
+	\PYG{n}{test\PYGZus{}accu} \PYG{o}{=} \PYG{n}{num\PYGZus{}corrected\PYGZus{}prediction\PYGZus{}test} \PYG{o}{/} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{y\PYGZus{}test}\PYG{p}{)}
+	\PYG{n}{test\PYGZus{}accuracy\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{test\PYGZus{}accu}\PYG{p}{)}
+	
+	\PYG{c+c1}{\PYGZsh{} MSE}
+	\PYG{n}{max\PYGZus{}index\PYGZus{}train\PYGZus{}mse} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{max}\PYG{p}{((}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{matmul}\PYG{p}{(}\PYG{n}{X\PYGZus{}train\PYGZus{}}\PYG{p}{,} \PYG{n}{W\PYGZus{}mse}\PYG{p}{)),} \PYG{n}{dim}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{indices}\PYG{o}{.}\PYG{n}{numpy}\PYG{p}{()}
+	\PYG{n}{num\PYGZus{}corrected\PYGZus{}prediction\PYGZus{}train\PYGZus{}mse} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{max\PYGZus{}index\PYGZus{}train\PYGZus{}mse} \PYG{o}{==} \PYG{n}{y\PYGZus{}train}\PYG{p}{)}
+	\PYG{n}{train\PYGZus{}accu\PYGZus{}mse} \PYG{o}{=} \PYG{n}{num\PYGZus{}corrected\PYGZus{}prediction\PYGZus{}train} \PYG{o}{/} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{y\PYGZus{}train}\PYG{p}{)}
+	\PYG{n}{train\PYGZus{}accuracy\PYGZus{}list\PYGZus{}mse}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{train\PYGZus{}accu\PYGZus{}mse}\PYG{p}{)}
+	
+	\PYG{n}{max\PYGZus{}index\PYGZus{}test\PYGZus{}mse} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{max}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{matmul}\PYG{p}{(}\PYG{n}{X\PYGZus{}test\PYGZus{}}\PYG{p}{,} \PYG{n}{W\PYGZus{}mse}\PYG{p}{),} \PYG{n}{dim}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{indices}\PYG{o}{.}\PYG{n}{numpy}\PYG{p}{()}
+	\PYG{n}{num\PYGZus{}corrected\PYGZus{}prediction\PYGZus{}test\PYGZus{}mse} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{max\PYGZus{}index\PYGZus{}test\PYGZus{}mse} \PYG{o}{==} \PYG{n}{y\PYGZus{}test}\PYG{p}{)}
+	\PYG{n}{test\PYGZus{}accu\PYGZus{}mse} \PYG{o}{=} \PYG{n}{num\PYGZus{}corrected\PYGZus{}prediction\PYGZus{}test\PYGZus{}mse} \PYG{o}{/} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{y\PYGZus{}test}\PYG{p}{)}
+	\PYG{n}{test\PYGZus{}accuracy\PYGZus{}list\PYGZus{}mse}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{test\PYGZus{}accu\PYGZus{}mse}\PYG{p}{)}
+	
+	
+	
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Train Accuracy: \PYGZdq{}}\PYG{p}{,} \PYG{n}{train\PYGZus{}accu}\PYG{p}{)}
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Test Accuracy: \PYGZdq{}}\PYG{p}{,} \PYG{n}{test\PYGZus{}accu}\PYG{p}{)}
+	
+	\PYG{n}{W}\PYG{o}{.}\PYG{n}{grad}\PYG{o}{.}\PYG{n}{zero\PYGZus{}}\PYG{p}{()}
+	\PYG{n}{W\PYGZus{}mse}\PYG{o}{.}\PYG{n}{grad}\PYG{o}{.}\PYG{n}{zero\PYGZus{}}\PYG{p}{()}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{epochs}\PYG{p}{,} \PYG{n}{train\PYGZus{}accuracy\PYGZus{}list}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}Train\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{epochs}\PYG{p}{,} \PYG{n}{test\PYGZus{}accuracy\PYGZus{}list}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}Test\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Epochs\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Classification Accuracy \PYGZhy{} Cross Entropy\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}/Users/yinruideng/Desktop/senior\PYGZus{}spring/cse546/hw/hw2/latex/B4\PYGZus{}c\PYGZus{}1.png\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{epochs}\PYG{p}{,} \PYG{n}{train\PYGZus{}accuracy\PYGZus{}list\PYGZus{}mse}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}Train\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{epochs}\PYG{p}{,} \PYG{n}{test\PYGZus{}accuracy\PYGZus{}list\PYGZus{}mse}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}Test\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Epochs\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Classification Accuracy \PYGZhy{} Ridge Regression\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}/Users/yinruideng/Desktop/senior\PYGZus{}spring/cse546/hw/hw2/latex/B4\PYGZus{}c\PYGZus{}2.png\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+\end{Verbatim}

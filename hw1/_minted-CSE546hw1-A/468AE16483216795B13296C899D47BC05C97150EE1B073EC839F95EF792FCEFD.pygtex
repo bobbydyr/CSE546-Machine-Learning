@@ -1,0 +1,36 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k+kn}{import} \PYG{n+nn}{mnist}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+
+\PYG{n}{mndata} \PYG{o}{=} \PYG{n}{mnist}\PYG{o}{.}\PYG{n}{MNIST}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}./python\PYGZhy{}mnist/data/\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{labels\PYGZus{}train} \PYG{o}{=} \PYG{n+nb}{map}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{,} \PYG{n}{mndata}\PYG{o}{.}\PYG{n}{load\PYGZus{}training}\PYG{p}{())}
+\PYG{n}{X\PYGZus{}test}\PYG{p}{,} \PYG{n}{labels\PYGZus{}test} \PYG{o}{=} \PYG{n+nb}{map}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{,} \PYG{n}{mndata}\PYG{o}{.}\PYG{n}{load\PYGZus{}testing}\PYG{p}{())}
+\PYG{n}{X\PYGZus{}train} \PYG{o}{=} \PYG{n}{X\PYGZus{}train}\PYG{o}{/}\PYG{l+m+mf}{255.0}
+\PYG{n}{X\PYGZus{}test} \PYG{o}{=} \PYG{n}{X\PYGZus{}test}\PYG{o}{/}\PYG{l+m+mf}{255.0}
+
+\PYG{c+c1}{\PYGZsh{} Train function}
+\PYG{k}{def} \PYG{n+nf}{train}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,}\PYG{n}{y}\PYG{p}{,}\PYG{n}{lam}\PYG{p}{):}
+	\PYG{n}{n}\PYG{p}{,} \PYG{n}{d} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}
+	\PYG{n}{y} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{eye}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{)[}\PYG{n}{y}\PYG{p}{]} \PYG{c+c1}{\PYGZsh{} put y into a one hot encoding matrix}
+    \PYG{n}{reg\PYGZus{}matrix} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{regLambda} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{identity}\PYG{p}{(}\PYG{n}{d} \PYG{p}{)}
+    \PYG{n}{reg\PYGZus{}matrix}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{0}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{theta} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linalg}\PYG{o}{.}\PYG{n}{pinv}\PYG{p}{((}\PYG{n}{X\PYGZus{}}\PYG{o}{.}\PYG{n}{T} \PYG{o}{@} \PYG{n}{X\PYGZus{}}\PYG{p}{)} \PYG{o}{+} \PYG{n}{reg\PYGZus{}matrix}\PYG{p}{)} \PYG{o}{@} \PYG{p}{(}\PYG{n}{X\PYGZus{}}\PYG{o}{.}\PYG{n}{T} \PYG{o}{@} \PYG{n}{y}\PYG{p}{)}
+	\PYG{k}{return} \PYG{n}{W}
+
+\PYG{k}{def} \PYG{n+nf}{predict}\PYG{p}{(}\PYG{n}{W}\PYG{p}{,} \PYG{n}{X\PYGZus{}new}\PYG{p}{):}
+	\PYG{k}{return} \PYG{p}{(}\PYG{n}{X\PYGZus{}new} \PYG{o}{@} \PYG{n}{W\PYGZus{}hat}\PYG{p}{)}\PYG{o}{.}\PYG{n}{argmax}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Compute weights}
+\PYG{n}{W\PYGZus{}hat} \PYG{o}{=} \PYG{n}{train}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{labels\PYGZus{}train}\PYG{p}{,} \PYG{n}{lam} \PYG{o}{=} \PYG{l+m+mf}{0.00001}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} Computed predicted training label}
+\PYG{n}{predicted\PYGZus{}train} \PYG{o}{=} \PYG{n}{predict}\PYG{p}{(}\PYG{n}{W}\PYG{o}{=}\PYG{n}{W\PYGZus{}hat}\PYG{p}{,} \PYG{n}{X\PYGZus{}new}\PYG{o}{=}\PYG{n}{X\PYGZus{}train}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} Compute predicted testing label}
+\PYG{n}{predicted} \PYG{o}{=} \PYG{n}{predict}\PYG{p}{(}\PYG{n}{W}\PYG{o}{=}\PYG{n}{W\PYGZus{}hat}\PYG{p}{,} \PYG{n}{X\PYGZus{}new}\PYG{o}{=}\PYG{n}{X\PYGZus{}test}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} Compute error rate for both training and testing}
+\PYG{n}{train\PYGZus{}error\PYGZus{}rate} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}}\PYG{p}{(} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{predicted\PYGZus{}train} \PYG{o}{==} \PYG{n}{labels\PYGZus{}train}\PYG{p}{)} \PYG{o}{/} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{labels\PYGZus{}train}\PYG{p}{))}
+\PYG{n}{test\PYGZus{}error\PYGZus{}rate} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{predicted} \PYG{o}{==} \PYG{n}{labels\PYGZus{}test}\PYG{p}{)} \PYG{o}{/} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{labels\PYGZus{}test}\PYG{p}{))}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Training Accuracy is: \PYGZdq{}}\PYG{p}{,} \PYG{n}{train\PYGZus{}error\PYGZus{}rate}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Testing Error Rate is: \PYGZdq{}}\PYG{p}{,} \PYG{n}{test\PYGZus{}error\PYGZus{}rate}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{}Training Error is:  0.14806666666666668}
+\PYG{c+c1}{\PYGZsh{}Testing Error Rate is:  0.14659999999999995}
+\end{Verbatim}

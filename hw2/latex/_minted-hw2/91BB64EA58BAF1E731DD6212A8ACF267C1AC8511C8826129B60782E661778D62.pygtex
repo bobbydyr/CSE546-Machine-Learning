@@ -1,0 +1,144 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k+kn}{import} \PYG{n+nn}{pandas} \PYG{k}{as} \PYG{n+nn}{pd}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+
+
+\PYG{k}{class} \PYG{n+nc}{Lasso}\PYG{p}{:}
+
+	\PYG{k}{def} \PYG{n+nf+fm}{\PYGZus{}\PYGZus{}init\PYGZus{}\PYGZus{}}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{lamb}\PYG{o}{=}\PYG{l+m+mf}{0.001}\PYG{p}{,} \PYG{n}{delta}\PYG{o}{=}\PYG{l+m+mf}{0.05}\PYG{p}{):}
+		\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lamb} \PYG{o}{=} \PYG{n}{lamb}
+		\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{last\PYGZus{}w} \PYG{o}{=} \PYG{k+kc}{None}
+		\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{b} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+		\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{delta} \PYG{o}{=} \PYG{n}{delta}
+		\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{loss\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+		\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{last\PYGZus{}selected\PYGZus{}coef} \PYG{o}{=} \PYG{p}{[]}
+		\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{selected\PYGZus{}feature\PYGZus{}index} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{7}\PYG{p}{,} \PYG{l+m+mi}{12}\PYG{p}{]}
+	
+	\PYG{k}{def} \PYG{n+nf}{coordinate\PYGZus{}descent}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{initial\PYGZus{}w}\PYG{p}{):}
+		\PYG{n}{n}\PYG{p}{,} \PYG{n}{d} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}
+		\PYG{n}{W} \PYG{o}{=} \PYG{n}{initial\PYGZus{}w}
+		\PYG{n}{a} \PYG{o}{=} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{power}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{p}{),} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+		\PYG{n}{loss} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{power}\PYG{p}{((}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{b} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ones}\PYG{p}{((}\PYG{n}{n}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{))} \PYG{o}{+} \PYG{n}{X}\PYG{o}{.}\PYG{n}{dot}\PYG{p}{(}\PYG{n}{W}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{y}\PYG{p}{),} \PYG{l+m+mi}{2}\PYG{p}{))} \PYG{o}{+}
+		 \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lamb} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{W}\PYG{p}{))}
+		
+		\PYG{n}{not\PYGZus{}converge} \PYG{o}{=} \PYG{k+kc}{True}
+		\PYG{k}{while} \PYG{n}{not\PYGZus{}converge}\PYG{p}{:}
+			\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{b} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{average}\PYG{p}{(}\PYG{n}{y} \PYG{o}{\PYGZhy{}} \PYG{n}{X}\PYG{o}{.}\PYG{n}{dot}\PYG{p}{(}\PYG{n}{W}\PYG{p}{))}
+			\PYG{n}{loss\PYGZus{}prev} \PYG{o}{=} \PYG{n}{loss}
+			\PYG{n}{prev\PYGZus{}w} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{(}\PYG{n}{W}\PYG{p}{)}
+			\PYG{k}{for} \PYG{n}{k} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{d}\PYG{p}{):}
+				\PYG{n}{X\PYGZus{}k} \PYG{o}{=} \PYG{n}{X}\PYG{p}{[:,} \PYG{n}{k}\PYG{p}{]}
+
+				\PYG{n}{W}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{0}
+				\PYG{n}{c\PYGZus{}k} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{dot}\PYG{p}{((}\PYG{n}{y} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{b} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ones}\PYG{p}{((}\PYG{n}{n}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{))} \PYG{o}{+} \PYG{n}{X}\PYG{o}{.}\PYG{n}{dot}\PYG{p}{(}\PYG{n}{W}\PYG{p}{)))}\PYG{o}{.}\PYG{n}{T}\PYG{p}{,} \PYG{n}{X\PYGZus{}k}\PYG{p}{)}
+				\PYG{k}{if} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{c\PYGZus{}k} \PYG{o}{+} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lamb} \PYG{o}{\PYGZlt{}} \PYG{l+m+mi}{0}\PYG{p}{:}
+					\PYG{n}{W}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]} \PYG{o}{=} \PYG{p}{(}\PYG{n}{c\PYGZus{}k} \PYG{o}{*} \PYG{l+m+mi}{2} \PYG{o}{+} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lamb}\PYG{p}{)} \PYG{o}{/} \PYG{n}{a}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]}
+				\PYG{k}{elif} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{c\PYGZus{}k} \PYG{o}{\PYGZhy{}} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lamb} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{:}
+					\PYG{n}{W}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]} \PYG{o}{=} \PYG{p}{(}\PYG{n}{c\PYGZus{}k} \PYG{o}{*} \PYG{l+m+mi}{2} \PYG{o}{\PYGZhy{}} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lamb}\PYG{p}{)} \PYG{o}{/} \PYG{n}{a}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]}
+				\PYG{k}{else}\PYG{p}{:}
+					\PYG{n}{W}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]} \PYG{o}{=} \PYG{l+m+mi}{0}
+
+			\PYG{k}{if} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{W} \PYG{o}{\PYGZhy{}} \PYG{n}{prev\PYGZus{}w}\PYG{p}{))} \PYG{o}{\PYGZlt{}=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n+nb}{abs}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{delta} \PYG{o}{*} \PYG{n}{prev\PYGZus{}w}\PYG{p}{)):}
+				\PYG{n}{not\PYGZus{}converge} \PYG{o}{=} \PYG{k+kc}{False}
+				\PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{W}\PYG{p}{)}
+
+			\PYG{n}{loss} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{power}\PYG{p}{((}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{b} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{ones}\PYG{p}{((}\PYG{n}{n}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{))} \PYG{o}{+} \PYG{n}{X}\PYG{o}{.}\PYG{n}{dot}\PYG{p}{(}\PYG{n}{W}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{y}\PYG{p}{),} \PYG{l+m+mi}{2}\PYG{p}{))} \PYG{o}{+} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{lamb} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{W}\PYG{p}{))}
+			\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{loss\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{loss}\PYG{p}{)}
+			\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{last\PYGZus{}w} \PYG{o}{=} \PYG{n}{W}
+			\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{last\PYGZus{}selected\PYGZus{}coef} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{last\PYGZus{}w}\PYG{o}{.}\PYG{n}{T}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{][}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{selected\PYGZus{}feature\PYGZus{}index}\PYG{p}{]}
+			
+	\PYG{k}{def} \PYG{n+nf}{predict}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{X}\PYG{p}{):}
+		\PYG{k}{return} \PYG{n}{X}\PYG{o}{.}\PYG{n}{dot}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{last\PYGZus{}w}\PYG{p}{)}
+
+
+\PYG{k}{def} \PYG{n+nf}{compute\PYGZus{}initial\PYGZus{}lamb}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{):}
+	\PYG{n}{n}\PYG{p}{,} \PYG{n}{d} \PYG{o}{=} \PYG{n}{x}\PYG{o}{.}\PYG{n}{shape}
+	\PYG{n}{lamb\PYGZus{}array} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{((}\PYG{n}{d}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{))}
+	\PYG{k}{for} \PYG{n}{k} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{d}\PYG{p}{):}
+		\PYG{n}{lamb\PYGZus{}temp} \PYG{o}{=} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{x}\PYG{p}{[:,} \PYG{n}{k}\PYG{p}{]}\PYG{o}{.}\PYG{n}{T} \PYG{o}{@} \PYG{p}{(}\PYG{n}{y} \PYG{o}{\PYGZhy{}} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{y}\PYG{p}{)))}
+		\PYG{n}{lamb\PYGZus{}array}\PYG{p}{[}\PYG{n}{k}\PYG{p}{]} \PYG{o}{=} \PYG{n}{lamb\PYGZus{}temp}
+	\PYG{k}{return} \PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{lamb\PYGZus{}array}\PYG{p}{)}
+
+\PYG{k}{if} \PYG{n+nv+vm}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{==} \PYG{l+s+s2}{\PYGZdq{}\PYGZus{}\PYGZus{}main\PYGZus{}\PYGZus{}\PYGZdq{}}\PYG{p}{:}
+	\PYG{n}{df\PYGZus{}train} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}table}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}crime\PYGZhy{}train.txt\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{df\PYGZus{}test} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{read\PYGZus{}table}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}crime\PYGZhy{}test.txt\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{y\PYGZus{}train} \PYG{o}{=} \PYG{n}{df\PYGZus{}train}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}ViolentCrimesPerPop\PYGZdq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{values}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{n}{df\PYGZus{}train}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{l+m+mi}{1}\PYG{p}{)}
+	\PYG{n}{x\PYGZus{}train} \PYG{o}{=} \PYG{n}{df\PYGZus{}train}\PYG{o}{.}\PYG{n}{drop}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}ViolentCrimesPerPop\PYGZdq{}}\PYG{p}{,} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{values}
+	\PYG{n}{x\PYGZus{}test} \PYG{o}{=} \PYG{n}{df\PYGZus{}test}\PYG{o}{.}\PYG{n}{drop}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}ViolentCrimesPerPop\PYGZdq{}}\PYG{p}{,} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{values}
+	\PYG{n}{y\PYGZus{}test} \PYG{o}{=} \PYG{n}{df\PYGZus{}test}\PYG{p}{[}\PYG{l+s+s2}{\PYGZdq{}ViolentCrimesPerPop\PYGZdq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{values}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{n}{df\PYGZus{}test}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{l+m+mi}{1}\PYG{p}{)}
+	
+	
+	\PYG{n}{n} \PYG{p}{,}\PYG{n}{d} \PYG{o}{=} \PYG{n}{x\PYGZus{}train}\PYG{o}{.}\PYG{n}{shape}
+	\PYG{n}{lambda\PYGZus{}max} \PYG{o}{=} \PYG{n}{compute\PYGZus{}initial\PYGZus{}lamb}\PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{)}
+	\PYG{n}{initial\PYGZus{}model} \PYG{o}{=} \PYG{n}{Lasso}\PYG{p}{(}\PYG{n}{lambda\PYGZus{}max}\PYG{p}{)}
+	\PYG{n}{initial\PYGZus{}model}\PYG{o}{.}\PYG{n}{coordinate\PYGZus{}descent}\PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{((}\PYG{n}{d}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)))}
+	\PYG{n}{initial\PYGZus{}w} \PYG{o}{=} \PYG{n}{initial\PYGZus{}model}\PYG{o}{.}\PYG{n}{last\PYGZus{}w}
+	
+	\PYG{n}{lam\PYGZus{}list} \PYG{o}{=} \PYG{p}{(}\PYG{n}{lambda\PYGZus{}max}\PYG{p}{)} \PYG{o}{*} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{/} \PYG{l+m+mi}{2}\PYG{p}{)} \PYG{o}{**} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{20}\PYG{p}{)}
+	\PYG{n}{householdsize\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+	\PYG{n}{agePct12t29\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+	\PYG{n}{agePct65up\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+	\PYG{n}{pctUrban\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+	\PYG{n}{pctWSocSec\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+	\PYG{n}{trained\PYGZus{}w} \PYG{o}{=} \PYG{p}{[]}
+	\PYG{n}{initial\PYGZus{}loss\PYGZus{}train} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{((}\PYG{n}{initial\PYGZus{}model}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{y\PYGZus{}train}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}
+	\PYG{n}{initial\PYGZus{}loss\PYGZus{}test} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{((}\PYG{n}{initial\PYGZus{}model}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{x\PYGZus{}test}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{y\PYGZus{}test}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}
+	
+	\PYG{n}{loss\PYGZus{}train\PYGZus{}list} \PYG{o}{=} \PYG{p}{[}\PYG{n}{initial\PYGZus{}loss\PYGZus{}train}\PYG{p}{]}
+	\PYG{n}{loss\PYGZus{}test\PYGZus{}list} \PYG{o}{=} \PYG{p}{[}\PYG{n}{initial\PYGZus{}loss\PYGZus{}test}\PYG{p}{]}
+	\PYG{n}{number\PYGZus{}of\PYGZus{}nonezero\PYGZus{}feature} \PYG{o}{=} \PYG{p}{[]}
+	
+	\PYG{c+c1}{\PYGZsh{} lam\PYGZus{}list = [30,30]}
+	\PYG{k}{for} \PYG{n}{lam} \PYG{o+ow}{in} \PYG{n}{lam\PYGZus{}list}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{:]:}
+		\PYG{n}{model} \PYG{o}{=} \PYG{n}{Lasso}\PYG{p}{(}\PYG{n}{lam}\PYG{p}{)}
+		\PYG{n}{model}\PYG{o}{.}\PYG{n}{coordinate\PYGZus{}descent}\PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{,} \PYG{n}{initial\PYGZus{}w}\PYG{p}{)}
+		\PYG{n}{w\PYGZus{}new} \PYG{o}{=} \PYG{n}{model}\PYG{o}{.}\PYG{n}{last\PYGZus{}w}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{()}
+		\PYG{n}{number\PYGZus{}of\PYGZus{}nonezero\PYGZus{}feature}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{count\PYGZus{}nonzero}\PYG{p}{(}\PYG{n}{w\PYGZus{}new}\PYG{p}{))}
+		\PYG{n}{householdsize\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{w\PYGZus{}new}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}
+		\PYG{n}{agePct12t29\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{w\PYGZus{}new}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{])}
+		\PYG{n}{agePct65up\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{w\PYGZus{}new}\PYG{p}{[}\PYG{l+m+mi}{5}\PYG{p}{])}
+		\PYG{n}{pctUrban\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{w\PYGZus{}new}\PYG{p}{[}\PYG{l+m+mi}{7}\PYG{p}{])}
+		\PYG{n}{pctWSocSec\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{w\PYGZus{}new}\PYG{p}{[}\PYG{l+m+mi}{12}\PYG{p}{])}
+		
+		\PYG{n}{loss\PYGZus{}train} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{((}\PYG{n}{model}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{y\PYGZus{}train}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}
+		\PYG{n}{loss\PYGZus{}train\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{loss\PYGZus{}train}\PYG{p}{)}
+		\PYG{n}{loss\PYGZus{}test} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{((}\PYG{n}{model}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{x\PYGZus{}test}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{y\PYGZus{}test}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}
+		\PYG{n}{loss\PYGZus{}test\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{loss\PYGZus{}test}\PYG{p}{)}
+	
+	\PYG{n}{selected\PYGZus{}coef\PYGZus{}history} \PYG{o}{=} \PYG{p}{[}\PYG{n}{householdsize\PYGZus{}list}\PYG{p}{,} \PYG{n}{agePct12t29\PYGZus{}list}\PYG{p}{,}
+	\PYG{n}{agePct65up\PYGZus{}list}\PYG{p}{,} \PYG{n}{pctUrban\PYGZus{}list}\PYG{p}{,} \PYG{n}{pctWSocSec\PYGZus{}list}\PYG{p}{]}
+	
+	\PYG{c+c1}{\PYGZsh{} A.5 a}
+	\PYG{c+c1}{\PYGZsh{} Plot lambda against number\PYGZus{}of\PYGZus{}nonezero\PYGZus{}feature}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{lam\PYGZus{}list}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{:],} \PYG{n}{number\PYGZus{}of\PYGZus{}nonezero\PYGZus{}feature}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xscale}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}log\PYGZsq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Lambda\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}\PYGZsh{} of none\PYGZhy{}zero coef\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+	
+	\PYG{c+c1}{\PYGZsh{} A.5 b}
+	\PYG{c+c1}{\PYGZsh{} plot 5 different feature change with different lambda}
+	\PYG{n}{features} \PYG{o}{=} \PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}householdsize\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}agePct12t29\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}agePct65up\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}pctUrban\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}pctWSocSec\PYGZsq{}}\PYG{p}{]}
+	\PYG{k}{for} \PYG{n}{i}\PYG{p}{,} \PYG{n}{feature} \PYG{o+ow}{in} \PYG{n+nb}{enumerate}\PYG{p}{(}\PYG{n}{features}\PYG{p}{):}
+		\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{lam\PYGZus{}list}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{:],} \PYG{n}{selected\PYGZus{}coef\PYGZus{}history}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{label}\PYG{o}{=}\PYG{n}{feature}\PYG{p}{)}
+		\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xscale}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}log\PYGZsq{}}\PYG{p}{)}
+		\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Lambda\PYGZdq{}}\PYG{p}{)}
+		\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Loss\PYGZdq{}}\PYG{p}{)}
+		\PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{loc}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}upper left\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+	
+	\PYG{c+c1}{\PYGZsh{} A.5 c}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{lam\PYGZus{}list}\PYG{p}{,} \PYG{n}{loss\PYGZus{}train\PYGZus{}list}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}Train\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{lam\PYGZus{}list}\PYG{p}{,} \PYG{n}{loss\PYGZus{}test\PYGZus{}list}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}Test\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xscale}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}log\PYGZsq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Lambda\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Loss\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{(}\PYG{n}{loc}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}upper left\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+	
+	\PYG{n}{coeff\PYGZus{}data} \PYG{o}{=} \PYG{n}{pd}\PYG{o}{.}\PYG{n}{DataFrame}\PYG{p}{(\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}Coeff\PYGZdq{}}\PYG{p}{:} \PYG{p}{(}\PYG{n+nb}{list}\PYG{p}{(}\PYG{n}{w\PYGZus{}new}\PYG{o}{.}\PYG{n}{T}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])),}
+	\PYG{l+s+s2}{\PYGZdq{}Name\PYGZdq{}}\PYG{p}{:} \PYG{n}{df\PYGZus{}train}\PYG{o}{.}\PYG{n}{columns}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{:]\PYGZcb{})}\PYG{o}{.}\PYG{n}{sort\PYGZus{}values}\PYG{p}{([}\PYG{l+s+s2}{\PYGZdq{}Coeff\PYGZdq{}}\PYG{p}{],} \PYG{n}{ascending}\PYG{o}{=}\PYG{k+kc}{False}\PYG{p}{)}
+	\PYG{n}{coeff\PYGZus{}data}\PYG{p}{[:}\PYG{l+m+mi}{10}\PYG{p}{]}
+	\PYG{n}{coeff\PYGZus{}data}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{10}\PYG{p}{:]}
+\end{Verbatim}

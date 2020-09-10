@@ -1,0 +1,22 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{c+c1}{\PYGZsh{} ========================= A6e =========================}
+\PYG{n}{y\PYGZus{}train}\PYG{p}{[}\PYG{l+m+mi}{5}\PYG{p}{]} \PYG{c+c1}{\PYGZsh{} =2}
+\PYG{n}{y\PYGZus{}train}\PYG{p}{[}\PYG{l+m+mi}{13}\PYG{p}{]} \PYG{c+c1}{\PYGZsh{} =6}
+\PYG{n}{y\PYGZus{}train}\PYG{p}{[}\PYG{l+m+mi}{15}\PYG{p}{]} \PYG{c+c1}{\PYGZsh{} =7}
+
+\PYG{k}{for} \PYG{n}{y} \PYG{o+ow}{in} \PYG{p}{[}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{13}\PYG{p}{,} \PYG{l+m+mi}{15}\PYG{p}{]:}  \PYG{c+c1}{\PYGZsh{} this is the index of y in the X\PYGZus{}train}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{[}\PYG{n}{y}\PYG{p}{,:]}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{((}\PYG{l+m+mi}{28}\PYG{p}{,}\PYG{l+m+mi}{28}\PYG{p}{)))}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}/Users/yinruideng/Desktop/senior\PYGZus{}spring/cse546/hw/hw3/latex/plots/A6e/A6e\PYGZus{}\PYGZdq{}}\PYG{o}{+}
+	\PYG{n+nb}{str}\PYG{p}{(}\PYG{n}{y}\PYG{p}{)}\PYG{o}{+}\PYG{l+s+s2}{\PYGZdq{}.png\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+	
+	\PYG{k}{for} \PYG{n}{k} \PYG{o+ow}{in} \PYG{p}{[}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{15}\PYG{p}{,} \PYG{l+m+mi}{40}\PYG{p}{,} \PYG{l+m+mi}{100}\PYG{p}{]:}
+		\PYG{n}{plt}\PYG{o}{.}\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{dot}\PYG{p}{(}\PYG{n}{V}\PYG{p}{[:}\PYG{n}{k}\PYG{p}{,} \PYG{p}{:]}\PYG{o}{.}\PYG{n}{T}\PYG{o}{.}\PYG{n}{dot}\PYG{p}{(}\PYG{n}{V}\PYG{p}{[:}\PYG{n}{k}\PYG{p}{,} \PYG{p}{:]),} \PYG{n}{X\PYGZus{}train}\PYG{p}{[:,} \PYG{p}{:]}\PYG{o}{.}\PYG{n}{T}\PYG{p}{)}\PYG{o}{.}\PYG{n}{T}\PYG{p}{[}\PYG{n}{y}\PYG{p}{]}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{((}\PYG{l+m+mi}{28}\PYG{p}{,} \PYG{l+m+mi}{28}\PYG{p}{)))}
+		\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}/Users/yinruideng/Desktop/senior\PYGZus{}spring/cse546/hw/hw3/latex/plots/A6e/A6e\PYGZus{}\PYGZdq{}} \PYG{o}{+}
+		\PYG{n+nb}{str}\PYG{p}{(}\PYG{n}{y}\PYG{p}{)} \PYG{o}{+} \PYG{l+s+s2}{\PYGZdq{}\PYGZus{}\PYGZdq{}}\PYG{o}{+}\PYG{n+nb}{str}\PYG{p}{(}\PYG{n}{k}\PYG{p}{)}\PYG{o}{+}\PYG{l+s+s2}{\PYGZdq{}.png\PYGZdq{}}\PYG{p}{)}
+		\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} test case}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{imshow}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{dot}\PYG{p}{(}\PYG{n}{V}\PYG{p}{[:}\PYG{n}{k}\PYG{p}{,} \PYG{p}{:]}\PYG{o}{.}\PYG{n}{T}\PYG{o}{.}\PYG{n}{dot}\PYG{p}{(}\PYG{n}{V}\PYG{p}{[:}\PYG{n}{k}\PYG{p}{,} \PYG{p}{:]),} \PYG{n}{X\PYGZus{}train}\PYG{p}{[:,} \PYG{p}{:]}\PYG{o}{.}\PYG{n}{T}\PYG{p}{)}\PYG{o}{.}\PYG{n}{T}\PYG{p}{[}\PYG{n}{y}\PYG{p}{]}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{((}\PYG{l+m+mi}{28}\PYG{p}{,} \PYG{l+m+mi}{28}\PYG{p}{)))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+\end{Verbatim}

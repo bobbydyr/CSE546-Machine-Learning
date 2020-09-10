@@ -1,0 +1,1276 @@
+Page 1
+Homework #2
+CSE 546: Machine Learning
+1 A Taste of Learning Theory
+1. Consider the definition of R(8).
+EXy,s(1{8(X)+ Y}] = Exy[Esjxy[1{8(x)+ y}\X = x, Y = y]]
+= Exy[1{8(x) # y}|X = x,Y = y]
+= Exy[P(8(x) # y)|X = x,Y = y]
+= Exy[1 – as(x, y)|X = x,Y = y]
+= Ex [Ey|x[1 – as (x, y)|X = x]]
+K
+= Ex[> (1 – as(x, y))P(Y = y|X = x)] By the expectation definition
+i=1
+к
+к
+= Ex[P(Y = y|X = x) – as(x, y)P(Y = y|X = x)] P(Y = y|X = x) = 1
+i=1
+i=1
+i=1
+K
+= Ex[1 –as (x, y)P(Y = y|X = x))
+i=1
+To find the permissible Bayes classifiers, we have to minimize the last expression Ex[1 – E, as(x, y)P(Y =
+y|X = x)], which is the same as maximize E as(x, y)P(Y = y|X = x). Thus, we can write the maximization
+problem as follows.
+ri=1
+K
+max as (x, y)P(Y = y|X = x)
+i=1
+K
+Σα6(α, ) - 1
+y=1
+0 < as (x, y) < 1
+Note that P(Y = y|X = x) is always positive. This implies that our objective function will maximized when
+we set as(x, y) = 1 for the largest value of P(Y = y|X = x). Thus, the set of all Bayes classifiers is as follows.
+8, = {8| a(x, y) = 1 and a(x, y) = 0 Vy ¢ Y'}
+YƐY'
+where Y' = {y = argmax.,P(Y = y|X = x)}.
+For a deterministic decision rule, the maximization problem will written as follows.
+K
+max > as (x, y)P(Y = y|X = x)
+i=1
+K
+Eas (x, y) = 1
+y=1
+as (x, y) E {0, 1}
+1
+
+
+Page 2
+Thus, the objective function will be maximized when we pick the largest value of P(Y
+x) for all y e {1,..., K} and set as(x, y*)
+y|X = x). Thus,
+1 where y*
+x) and set æs(x, y + y*) = 0. If there are more than one y* E {1,..., K} that
+leads to argmax,„P(Y = y|X = x), we are indifferent between these y*'s. Note that we can pick only one due
+the decision rule is to sort P(Y = y|X
+y|X
+argmax, P(Y
+h.
+to the restriction on as (x, y).
+2.
+a. First, note that 1(f(x;) + yi) is random variable that follows Bernoulli distribution by its definition.
+Suppose 1(f(x;) + Yi) follows Bernoulli distribution with parameter p. Then, we have p = Exy[1(f(X)+
+Y)] = R(F).
+Let Z; = 1(f(x;) # yi). Then, we have following expression.
+п
+|Ên Ñ – R(Ñ)| = 1;1({#i) + y») – p| = 1;z. – Exy[Z!]|
+1(f(x:) # y;) – p| = |
+Z; – Exy[Z¡]|
+i=1
+i=1
+Based on the last expression above, we can use the Hoeffding's inequality.
+(-)=
+2ne?
+P (Iê, Ñ – RÕ) 2 <) < 2 exp
+(1 – 0)?,
+= 2 exp (-2ne?)
+Let 2 exp (-2ne?) = 8. Then, we can calculate e.
+2 exp (-2ne²) = 6
+exp (-2ne?) =
+- log(
+2n
+-V
+log(중)
+2n
+Thus, we can rewrite P (|Rm(Ñ) – R(Ñ)I > e) as follows.
+P( IÊmÑ – R(Ñ| >V log()) <8
+2n
+1-P( |m() – R(ÕI > V log()) <1- 8
+2n
+P(IR, Ñ – R(Ñ)| < V, log(5)) <1-6
+2n
+Thus, A =
+Vhlog(중).
+= arg minfeF R(f)
+{f1,..., fk}, this means that f* does not depend on {(xi, Yi)}"-1. Then, the i.i.d. condition
+still holds. Replacing f*, we have Rn(f*) = D-, Z; and R(f*) = E[Z;]. We can still use Hoeffdings
+inequality to construct the confidence interval. Thus, we will get the same confidence interval as in part
+b. If we replace f with f* in part a., the same confidence interval still holds. As f*
+and F
+i=1•
+i=1
+a.
+c. If we replace f with f in part a., the same confidence interval no longer holds as the i.i.d. condition is
+violated due to the dependency of f on {(xi, Yi)}_1· When the i.i.d. condition is violated, we cannot use
+Hoeffdings inequality to construct the confidence interval.
+
+
+Page 3
+к
+d. From question 1, we have R(8) = Ex[E1(1 – as(x, y))P(Y = y|X = x)].
+Now, consider deterministic classifier f : X → {-1,1} that classifies only two classes where f e F and F
+is infinite set, we can write R(f) as follows.
+ri=1
+R(f) = Ex[(1– P(f(X)=Y))P(Y = y|X = x)]
+%3|
+= Ex{P(f(X)#Y))P(Y = y|X = x)]
+= Ex[1(f(X)#Y)P(Y = y|X = x)]
+= Ex[1(f(X) = -1)P(Y = 1|X = x) +1(f(X)= 1)P(Y = –1|X = x)]
+If P(Y = 1|X = x) = P(Y = –1|X = x) = 0.5 for any underlying distribution for random variable X, we
+will have R(f) = 0.5.
+Since F is infinite such as F be all deterministic classifiers, there will always exist f E F that could classify
+all data {r;, Yi}1 correctly. Thus, the empirical risk R,(f) = 0.
+e. For a confidence interval to be simultaneously hold for the losses of all f e F, we have to consider
+P(supfer |Rn(f) – R(f)| 2 e).
+P(sup |Rn (f) – R(f)| > e) = P(U JÊm(f) – R(f)| 2 €)
+ƒEF
+fEF
+< P(\ÊRn(f) – R(f)| > e)
+fEF
+=2 exp (-2ne?)
+fEF
+= 2|F| exp (-2ne²)
+Then, we have P(supfeF|Rn(f) – R(f)| 2 e) < 2|F| exp (-2ne²), which be expressed as follows.
+1- P(sup |R. (f) – R(f)| > e) > 1 – 2|F| exp (-2ne?)
+ƒEF
+P(sup |Rm(f) – R(f)| < e) > 1 – 2|F|exp (-2ne²)
+ƒEF
+Let 2|F| exp (-2ne?) = 8. Then, we can solve for e.
+exp (-2ne?) <
+2|F|
+く
+exp (2ne?)
+2|F|
+2지
+< exp (2ne?)
+2|F|
+log
+(7)
+< 2ne?
+log
+2n
+<e?
+2|F|
+log
+(t)
+2n
+2|F|
+log
+(27).
+Thus, B
+2n
+3
+
+
+Page 4
+f. Note that |R(Î) – Rn (F)| = |Rn(f) – R(f)|. Since f e F or f is the best classifier in F, then we have the
+following expression.
+|m() – R(Î)| < | sup Rn (f) – R(Î)|
+ƒEF
+where | supfeF Rn(f) – R(f)| holds with a probability greater than 1 – ô according to part e.
+g.
+R(f) – R(f*) = R(Î) – Ân (Î) + Ân (Î) – R(f*)
+= (R(Î) – Rn(Î) + (Rm(Î) – R(f*))
+< | sup Rn (f) – R(Î)|+ (Rm (Î) – R(f*)) by part f.
+dns | >
+ƒEF
+= | sup Rm(f) – R()) + (R„(F) – inf R(f))
+fEF
+fEF
+= | sup Rn(f) – R(ÔI+| sup Ân (Î) – R(f)|
+fEF
+fEF
+< | sup Rn(f) – R(Î)I+| sup Rm(f) - R(f)|
+fEF
+ƒEF
+= 2| sup R, (f) – R()|
+fEF
+2|F|
+2 Jo8
+(t)
+<2 x
+by part e.
+Thus, C = 2 x
+log ().
+2n
+h. By definition, we have Rn(f) = :E 1(f(x;) # Yi). Consider Rm(f) = 0.
+%3|
+i=1
+пх0
+Rn (f) =
+п
+Therefore, P(Rn(f)= 0) can occur only when all classification are correct.
+P(Rn(f) = 0) = |(1 – P(f(x:) # yi))
+i=1
+= (1 – P(f(X)#Y))"
+= (1 – P(f(X)#Y))"
+= (1 – Exy[1(f(X)#Y)])"
+= (1 – R(f))"
+< (1 – e)"
+by assumption R(f) > e
+Next, show that (1 – e)" <e-ne. Using the expression 1+ x < e", we have the following expression.
+1-e<e-e
+(1— е)" < e-пe
+This completes the proof on P(Rn (f) = 0) < (1 – )" <e-ne.
+» R(f) – R(f*)< log(F//3), We will have R(f)– R(f*) >
+Next, consider the reverse case of Rn(f)=0
+log(|F\/8). Based on this new assumption,
+4
+
+
+Page 5
+i. From part h, we know that R(f)– R(f*)< log(/3). We can check if learning is possible for each |F||
+log (|F|/8)
+by calculating the limitation of
+as n becomes large.
+(a) F is a constant or F = c.
+log(c/8)
+lim
+п30
+log (c)
+log(8)
+lim
+п—0
+lim
+п—0
+= 0 – 0 = 0
+Since the limitation on the upper bound is zero, it is possible to learn and the excess risk is a function
+of O(n-1).
+(b) F = nº for some constant p.
+log(nP/8)
+lim
+п-0
+lim
+п30
+plog(n)
+log(8)
+lim
+plog(n)
+lim
+1/n
+p lim
+%3D
+п—0
+п—0
+п30
+1
+Since the limitation on the upper bound is zero, it is possible to learn and the excess risk is a function
+of O(n-1 log(n)).
+(c) |F| = exp(/n).
+log(exp(/n)/8)
+Vn log(e)
+log(8)
+lim
+Vn log(e)
+lim
+п—0
+n1/2
+lim
+п—0
+lim
+п—0
+= lim
+п—0
+lim n-1/2 = 0
+п>0
+п30
+Since the limitation on the upper bound is zero, it is possible to learn and the excess risk is a function
+of O(n-1/2).
+(d) |F| = exp(10n).
+log (exp(10n)/8)
+10n log(e)
+log(8)
+lim
+lim
+п—0
+lim
+п—0
+10 log(e) lim
+- = 10
+n→0 n
+п30
+Since the limitation on the upper bound greater than zero, it is not possible to learn.
+5
+
+
+Page 6
+2
+Programming: Lasso
+3.
+Plot 1:
+the number of non-zeros versus lambda
+1000 -
+800 -
+600 -
+400
+200 -
+10-4
+10-3
+10-2
+10-1
+10°
+101
+102
+103
+lambda
+Figure 1: The number of non-zeros versus A
+Plot 2:
+FDR vs TDR
+1.0 -
+0.8 -
+0.6
+0.4
+0.2 -
+0.0
+0.2
+0.4
+0.6
+0.8
+FDR
+Figure 2: FDR versus TDR
+It is clearly shown that number of nonzeros varies inversely with the size of lambda. At maximum lambda,
+none of the features is selected. Thus, value of both TDR and FDR are zeros. As lambda decreases, number of
+nonzeros or features selected increases. Both TDR and FDR increases, while size of lambda decreases.
+number of non-zeros
+TDR
+
+
+Page 7
+4.
+a. Plot 1: Squared Error of Training and Validation Data
+Squared error on training and validation data versus lambda
+6000
+training error
+validating error
+5000
+4000 -
+3000
+2000
+1000
+101
+10°
+10-1
+10-2
+lambda
+Figure 3: Squared Error of Training and Validation Data
+Plot 2: Mean squared error of Training and Validation Data (which I tried to get from the Squared Error)
+Squared error on training and validation data versus lambda
+0.0014 -
+training error
+validating error
+0.0012 니
+0.0010 -
+0.0008
+0.0006 -
+0.0004
+0.0002
+101
+10°
+10-1
+10-2
+lambda
+Figure 4: Mean Squared Error of Training and Validation Data
+Plot 3: Number of nonzeros versus lambda
+the number of non-zeros versus lambda
+500 -
+400 -
+300 -
+200
+100 -
+101
+10°
+10-1
+10-2
+lambda
+Figure 5: Mean Squared Error of Training and Validation Data
+b. Mean squared error for training data: 0.0002267535083922399
+Mean squared error for validation data: 0.0008799982085554286
+squared error
+number of nonzeros
+squared error
+
+
+Page 8
+Mean squared error for testing data: 0.959019323607585
+c. Ten largest weight:
+(a) -27.01946528
+(b) -15.1325619
+(c) -10.2800546
+(d) -8.52877712
+(e) -7.92047534
+(f) -7.46106309
+(g) -7.17076691
+(h) -6.90774795
+(i) -6.08067917
+(j) -5.53699377
+Their corresponding features:
+(a) log(UserNumReviews)
+(b) UserAverageStars*UserCoolVotes
+(c) sqrt(UserNumReviews*UserFunny Votes)
+(d) sq(ReviewNumWords*UserNumReviews)
+(e) log(ReviewNumWords*ReviewInFall)
+(f) sqrt(ReviewInFall*UserNumReviews)
+(g) sqrt(ReviewNumLineBreaks*UserNumReviews)
+(h) log(UserNumReviews*BusinessNumCheckins)
+(i) sqrt(UserCoolVotes*IsMexican)
+(j) sqrt(ReviewInWinter*UserCoolVotes)
+
+
+Page 9
+2.1 Programming: Binary Logistic Regression
+5.
+a. Consider li(w, b), we can write the exponential term as follows.
+exp(-y;(b+ x w))
+1- Hi(w, b)
+Hi(w, b)
+Hi(w, b)
+Consider the gradients Vwli(w,b) and Vöµi(w, b).
+- exp(-y;(b+ x, w)) × -y;x;
+[1+ exp(-y:(b+ xfw))]²
+— exp(-у:(b + х? w)) х - у:
+[1+ exp(-y:(b+ xfw))]?
+1- μ (wb)1 (y) μ.(w, b)]
+Mi(w, b)
+[1 – H;(w, b)]y:[4;(w, b)]²
+Hi(w, b)
+VwHi(w,b) =
+= μ (w, b) 1- (w, b)] (γ: α")
+Уын (w, b) :
+μ (w, b)[1- μ (w, b)]yr
+Derive the gradients V„J(w, b) and V,J(w, b).
+1 exp(-y:(b+xfw)) × (-y;x;)
+1+ exp(-y:(b+xfw))
+VwJ(w, b) =
++ 2Aw
+1- Hi (w, b)
+Hi(w, b)
+x μ (w, b) x ( - :)+ 2λω
+п
+(1 – Hi(w,b))(-Y;X;) + 2Aw
+1 exp(-y:(b+ x7w)) × (-y;)
+1+ exp(-y:(b+ x}w))
+V¿J(w,b) =
+1- μ (ω, b)
+Hi(w, b)
+x μ (w, b) x ( -y)
+Σ1- μ(w, b)) (-y:)
+6.
+i=1
+Derive the Hessians V,J(w,b) and VJ(w,b).
+VJ(w, b)
+УЗ: Vwl(w, b) + 2AI
+Y;TiH;(w, b)[1 – µ; (w, b)](y;x") +2XI
+Συ μ. (w, b) [1 - μ (w, b] (τ,α ) + 2λΙ
+i=1
+Σ.
+п
+VJ(w, b) =
+у Vым (w, b)
+Yifli(w, b)[1 – µi(w, b)]y:
+Σ)μ, (w, b) [1 μ (w, b)]
+i=1
+WIWI WI
+||
+
+
+Page 10
+b. Gradient Descent
+(a) Plot of J(w,b)
+Plot of J(w,b) and iteration number
+0.7 -
+training J(w,b)
+testing J(w,b)
+0.6-
+0.5
+0.4
+0.3 -
+20
+40
+60
+80
+100
+iteration number
+Figure 6: J(w,b) versus iteration number
+(b) Plot of misclassification
+Plot of missclassification error and iteration number
+training
+0.050 -
+testing
+0.045 -
+0.040 -
+0.035 -
+0.030 -
+20
+40
+60
+80
+100
+iteration number
+Figure 7: misclassification versus iteration number
+10
+missclassification error
+(q'M)r
+
+
+Page 11
+c. Stochastic Gradient Descent with batch size = 1
+(a) Plot of J(w,b)
+Plot of J(w,b) and iteration number
+0.7
+training J(w,b)
+testing J(w,b)
+0.6 -
+0.5
+0.4 -
+0.3
+100
+200
+300
+400
+500
+iteration number
+Figure 8: J(w,b) versus iteration number
+(b) Plot of misclassification
+Plot of missclassification error and iteration number
+0.5
+training
+testing
+0.4 -
+0.3
+0.2 -
+0.1 -
+100
+200
+300
+400
+500
+iteration number
+Figure 9: misclassification versus iteration number
+11
+missclassification error
+(g'm)I
+
+
+Page 12
+d. Stochastic Gradient Descent with batch size
+100
+(a) Plot of J(w,b)
+Plot of J(w,b) and iteration number
+0.7 -
+training J(w,b)
+testing J(w,b)
+0.6
+0.5 -
+0.4
+0.3 -
+100
+200
+300
+400
+500
+iteration number
+Figure 10: J(w,b) versus iteration number
+(b) Plot of misclassification
+Plot of missclassification error and iteration number
+training
+testing
+0.08 -
+0.07
+0.06 -
+0.05
+0.04
+0.03-
+100
+200
+300
+400
+500
+iteration number
+Figure 11: misclassification versus iteration number
+12
+missclassification error
+(q'M)/
+
+
+Page 13
+e. Newton's Method
+(a) Plot of J(w,b)
+(b) Plot of misclassification
+13
+
+
+Page 14
+The code for Problem 3:
+import numpy as np
+import matplotlib.pyplot as plt
+np.random. seed (546)
+def cal lambdaMax (x, y):
+mean-y = np.mean(y)
+lambda array
+for k in range(d):
+x.k = x[: , k]
+lambda k
+np. zeros (d)
+2 * np.abs (np.sum(x-k * (y - mean-y), 0))
+lambda-array [k]
+return max(lambda_array)
+lambda k
+def coord (tuning, delta, w.input, x,
+пр. сору (w-input)
+w-prev = np.copy (w-input)
+y):
+W_new
+no
+check delta = True
+print (tuning)
+while check_delta :
+пр. сору (w-new)
+W -prev
+no += 1
+b
+np. dot (x, w -prev))
+np. mean ( y
+for j in range (d):
+a = 2 * np.sum(x[: , j] **2)
+wj
+хij
+wj-xij
+j)
+np. delete (x, j, axis=1)
+np. matmul (xij , wj)
+np. delete (w.
+W-new .
+ck
+2 * np. dot (x [: , j],y – (b + wj_xij))
+if ck < -tuning:
+(ck + tuning)/a
+w_new [j]
+elif ck > tuning :
+w-new j]
+(ck – tuning)/a
+else:
+w_new [j]
+check-delta
+any (np.abs (w_new
+w-prev) > delta)
+if no > 30:
+check delta
+print (no, end=" ,") # counting iterations, for reference
+False
+return w_new
+## Generate Data
+500
+d
+1000
+100
+sigma
+rate
+1.5
+delta
+0.001
+np.random. randn (n, d)
+np. random. randn (n) * (sigma **2)
+х %—
+noise
+w = np. zeros ((d))
+for j in range(k):
+14
+
+
+Page 15
+w[j] = (j+1)/k
+np. dot (x,w.T) + noise
+y
+lambda_max = cal_lambdaMax (x, y)
+w first
+np. zeros ((d,1))
+lambda-array
+= lambda_max * (1/rate) ** np. arange (0,40)
+nonzero = np. zeros (len (lambda array))
+fdr
+tdr
+w -first [:]
+true-indices = np. arange (0, k)
+for i in range (len (lambda-array)):
+print ('i=.', i)
+tuning
+print ( 'lambda =-' , tuning)
+w-old
+lambda-array [i]
+w-next =
+coord (tuning, delta, w-old, x, y)
+w old
+nnz = np. count-nonzero (w_next)
+nonzero [i]
+if nnz
+w_next
+nnz
+0:
+continue
+indices nnz = np.where (w_next ) [0]
+fdr.append (len (set (indices_nnz)
+tdr. append (len (set (true-indices) & set (indices nn z))/k)
+set (true indices))/nnz)
+print (nonzero)
+'nnz-lambda. png
+300)
+figl
+plt. figure (dpi
+plt . plot (lambda_array, nonzero)
+plt . xscale ('log')
+plt. xlabel ( 'lambda ')
+plt. ylabel( 'number-of non-zeros ')
+plt. title ('the_number of non-zeros versus lambda ')
+plt. savefig (fig1)
+plt . show ()
+= 'fdr-tdr.png
+300)
+fig2
+plt. figure (dpi
+plt . plot (fdr , tdr)
+plt. xlabel ( 'FDR')
+plt . ylabel ( 'TDR’)
+plt. title ( 'FDR.vs TDR')
+plt. savefig (fig2)
+plt . show ()
+15
+
+
+Page 16
+The code for Problem 4:
+Problem 4
+ייר וו
+import numpy as np
+import matplotlib.pyplot as plt
+np.random. seed (546)
+def cal_lambdaMax (x, y):
+mean-y = np.mean (y)
+lambda-array = np.zeros (d)
+for k in range(d):
+x.k = x[: , k]
+lambda k
+2 * np. abs (np.sum(x-k * (y
+mean-y), 0))
+lambda-array [k]
+return max(lambda_array)
+lambda_k
+def coord (tuning, delta , w-input, x,
+пр. сору ( w-input)
+= np.copy (w_input)
+y):
+W-new =
+W-prev
+no =
+check delt a
+True
+print (tuning)
+while check-delta :
+W -prev
+np.copy (w_new)
+no += 1
+b
+np. mean (y
+for j in range(d):
+np. dot (x,
+w-prev))
+2 * np.sum(x[:,j]**2)
+= np. delete (w_new,
+j)
+wj
+хij
+= np. delete (x, j, axis=1)
+wj-xij = np.dot (xij , wj)
+ck
+2 * np.dot (x[: ,j] ,y ·
+(b + wj-xij))
+if ck < -tuning:
+w_new j]
+elif ck > tuning :
+w_new j|
+(ck + tuning)/a
+(ck – tuning)/a
+else:
+w_new |j|
+print ("w_max.
+check delta
+, np.max( w_new))
+any (np.abs(w_new
+w-prev) > delta)
+if no > 30:
+check-delta
+= False
+print (no, end=" ," ) # counting iterations, for reference
+w-prev))
+= max(np.abs (w_new
+print ( max-delta) # sanity check
+max-delta
+return w_new
+# Param
+1000
+d
+rate =
+1.5
+delta = 0.1
+16
+
+
+Page 17
+# Load a
+np. genfromtxt (" upvote-data.csv",
+# Load a text file of integers:
+np. loadtxt (" upvote-labels.txt", dtype=np.int)
+# Load a
+Csv of flo ats :
+delimiter=" ,")
+y
+text file of strings:
+featureNames
+open (" upvote features.txt" ). read (). splitlines ()
+## pre-processing
+y = np. sqrt(y)
+X. shape [0]
+= 4000
+n =
+n-train
+n-valid = 1000
+X[0: n-train , :]
+y [0: n-train ]
+X[n-train : ( n-train+n-valid ), :]
+y [n_train :( n_train+n-valid )]
+= X[(n_train+n_valid ):n,:]
+y[(n-train+n-valid ):n]
+X-train
+y -train
+X-valid
+y - valid
+X_test
+y -test
+cal lambdaMax (X_train , y -train)
+= np. zeros ((d,1))
+lambda_max
+w first
+lambda array
+lambda_max * (1/rate) ** np. arange (0,21)
+w-old = w _first [:]
+= np. zeros (len (lambda-array))
+= np. zeros (len (lambda-array))
+= np. zeros (len (lambda-array))
+nonzerO
+sq -error _tr
+sq-error - val
+W -store =
+## Choosing the appropriate lambda
+for i in range(len(lambda-array)):
+print ('i=.', i)
+tuning
+w_new = coord (tuning , delta , w-old, X_train , y-train)
+w-store. append (w_new)
+y -est-train
+y -est-val
+nonzero [i]
+sq -error-tr [i]
+sq-error-val [i]
+w_old
+lambda-array [i]
+np. dot (w-new.T, X_train.T)
+. dot (w-new.T,
+= np.count_nonzero (w-new)
+пр.
+X-valid.T)
+= np.sum ((y -est-train
+= np.sum (( y -est-val
+y -train)**2)
+y -valid)**2)
+w-new
+print (sq-error tr)
+print (sq-error-val)
+fig3
+fig4
+'sq-error-yelp.png'
+'nnz lambda-yelp.png
+plt. figure (dpi
+plt . plot (lambda_array, sq-error-tr/(X_train.shape [0] **2), label
+plt . plot (lambda array, sq -error-val/(X_valid.shape [0] * *2), label
+plt. xscale ('log ')
+plt. gca (). invert xaxis ()
+plt. legend ()
+plt . xlabel ( 'lambda ')
+300)
+"training error")
+= " validating -err
+error")
+17
+
+
+Page 18
+plt . ylabel ('squared error ')
+plt. title ('Squared error on training and validationdata-versus lambda ')
+plt. savefig ( fig3)
+plt. figure (dpi
+plt. plot (lambda_array, nonzero)
+plt.gca (). invert-xaxis ()
+plt. xscale ('log ')
+plt. xlabel ( 'lambda ')
+plt. ylabel ('number-of -nonzeros ')
+plt. title ('the number-of non-zerosversus lambda ')
+plt. savefig ( fig4)
+300)
+###
+# Part b -
+# Find w-new using train and validation data
+# Find error for tr ain, val, test
+###
+lambda index
+tuning
+Get lambda from best validation performance
+= np. argmin (sq-error-val/(X_valid.shape [0]**2))
+lambda array [lambda_index]
+w -store [lambda_index]
+np. dot ( w-select.T, X_test.T)
+w-select
+y -est test =
+sq -error-tr[lambda_index]/(X_train.shape[0]**2)
+sq-error train_model
+sq -error-val_model = sq -error-val [1lambda_index ]/(X_valid.shape [0] **2)
+sq-error test-model
+print (sq-error train-model)
+print (sq-error-val model)
+print (sq-error test-model)
+np. mean (( y -est_test
+y -test ) **2)
+###
+# Part c
+# Find w_new using train and validation data
+# Find error for train , val, test
+###
+sort-indices
+Check w-select
+np. argsort ( w-select.T)
+ten-indices = sort-indices [0][0:10]
+print ('ten-largest weight: ')
+w -select [ten-indices]
+print ('ten-features : ')
+for
+in range (10):
+print ( featureNames [ ten-indices [i]])
+18
+
+
+Page 19
+The code for Problem 5:
+Problem 5
+from mnist import MNIST
+import numpy as np
+import matplotlib.pyplot as plt
+def load-dataset ():
+mndata
+MNIST ( ' ./ python-mnist/data ')
+X_train , 1 abels train
+map ( np. array, mndata.load training ())
+X_test , labels test = map(np. array, mndata.load-testing ())
+= X_train /255.0
+X-test /255.0
+X-train
+X_test
+return X_train , X_test, labels-train , labels test
+def sigmoid (y,x,wt):
+sig
+return sig
+1/(1 + np. exp(-y * np. matmul (x,
+wt)))
+def gradient-descent (tuning , step , x-train , y-train , x-test , y-test ):
+j-train = []
+j-test
+miss-train
+miss-test
+d
+х-train.shaре [1]
+w = np. zeros (d)
+b = 0
+no
+= np. mean ( np. log (1 + np. exp(-y-train * (b + np.matmul ( x-train , w))))) + tur
+jvalue-train
+j-train. append (jvalue-train)
+j-test-value
+j-test. append (j-test-value)
+while no <= 100 :
+= np.mean (np. log (1 + np. exp(-y-test * (b + np. matmul ( x test, w))))) + tunin
+print (" iter =" , no)
+print (" Jvalue=" ,
+jvalue-train )
+no += 1
+sigmoid (y-train , x-train ,w)
+mu =
+(1/x-train. shape [0]) * np. dot(-y-train * (1 – mu), x-train) + 2 * tuning
+gradw-j
+gradb-j
+np. mean(- y-train * (1 – mu))
+- step * gradw-j
+b
+step * gradb-j
+np. mean ( np. log(1 + np.exp(-y-train * (b + np.matmul (x-train , w)))))
+mean (np. log (1 + np.exp(-y-test * (b + np.matmul ( x-test , w))))) + tu
+jvalue-train
+jvalue-test
+pred-y-train = b + np.matmul ( x-train ,
+pred-y-test
+sign-y-train
+sign-y-test
+пр.
+w)
+b + np.matmul ( x-test , w)
+= np.sign( pred-y-train)
+= np. sign ( pred-y-test)
+= (np. size (sign-y-train
+y -train)
+(np. size (sign-y-test
+y -test)
+У-train)
+np.sum( sign -y -train
+y -train )) / np
+tr-error
+sign-y-train
+te_error
+y -test) - np.sum( sign_y-test
+y -test )) / np. siz
+sign-y-test
+19
+
+
+Page 20
+miss-train. append ( tr-error)
+miss-test.append (te-error)
+j-train . append (jvalue-train)
+j-test. append(jvalue-test)
+return j-tr ain , j-test , miss-train , miss test,
+def sgd (tuning, step, x-train, y-train , x-test, y-test, batch ):
+j-train
+j-test
+[]
+miss-train
+miss-test =
+х-train.shарe [1]
+w = np. zeros (d)
+b = 0
+d
+no
+= np.mean (np.log (1 + np. exp(-y-train * (b + np . matmul ( x-train , w))))) + tur
+jvalue-train
+j-train. append (jvalue train)
+j-test-value
+j-test. append(j_test-value)
+while no <= 500 :
+= np.mean (np.log (1 + np.exp(-y-test * (b + np. matmul ( x-test, w))))) + tunin
+print ("iter ==" , no)
+print (" Jvalue=.", jvalue-train)
+no += 1
+select = np. random.choice (np. arange (x-train. shape [0]), batch)
+sigmoid (y-tr ain [ select], x -train [ select ,:] ,w)
+mu =
+gradw-j
+(1/ batch) * np.dot(-y-train [ select] * (1 – mu), x_train [ select ,:]) + 2 * t
+gradb-j
+np. mean(- y-train [ select] * (1 – mu))
+step * gradw-j
+step * gradb-j
+W = W –
+b
+b
+jvalue train
+jvalue-test
+pred-y-train
+pred-y-test
+sign-y-train
+sign-y-test
+= np.mean ( np. log (1 + np. exp(-y-train * (b + np. matmul ( x-tr ain , w)))))
+np. mean ( np. log (1 + np.exp(-y-test (b + np.matmul ( x-test , w))))) + tu
+= b + np.matmul ( x-train ,
+b + np. matmul (x-test , w)
+np. sign ( pred-y-train)
+= np. sign ( pred-y-test)
+w)
+y -train )) / np
+(np. size ( sign-y-train
+y -train)
+(np. size ( sign-y-test
+y -test)
+tr-error
+y -train)
+np. sum( sign-y-train
+sign-y-train
+te_error
+y-test) - np.sum( sign-y -test
+y -test )) / np. siz
+sign-y-test
+miss-train.append ( tr-error)
+miss test.append (te-error)
+j-train . append (jvalue-train)
+j-test. append (jvalue-test)
+return j-train , j-test , miss-train , miss-test,
+def newton ( ) :
+return w_new
+## Obtain data only for 2 and 7
+20
+
+
+Page 21
+X-train , X_test, labels-train , labels test = load-dataset ()
+seven-train
+labels train
+two-train
+labels train
+2
+seven test
+labels test
+two test
+labels-test
+np.concatenate (( X_train [ seven-train], X_train [ two-train])
+= np.concatenate ((labels-train [ seven-train], labels-train [two-train]))
+y -train. astype (int)
+x-train
+У -train
+У-train
+len-seven_train
+len (labels-train [ seven-train])
+y -train [0:( len-seven-train +1)] = 1
+y -train [len -seven-train : len ( y-train )]
+np.concatenate ((X-test [seven-test], X_test[two-test]))
+np.concatenate ((labels-test [seven-test], labels-test [two-test]))
+y -test. astype (int)
+X-test
+y -test
+y -test
+len -seven -test
+len (labels-test [seven-test])
+y -test [0:(1len-seven-test +1)] = 1
+y -test [ len -seven_test +1:len ( y-test )] = -1
+xtrain avg = np.mean ( x-train , axis = 0)
+###
+# Part b. Gradient Descent
+###
+n_feature
+х-train.shaре [1]
+np. zeros ( n feature)
+0.0
+w first
+b-first
+tuning
+step = 0.1
+j_train , j-test , miss-train , miss-test , w =
+= 0.1
+gradient-descent (tuning, step , x-train , y-train
+fig
+'jvalue-gradient.png'
+300)
+label
+plt. figure (dpi
+plt . plot (j-train ,
+plt . plot (j-test , label
+plt. legend ()
+plt. xlabel ('iteration number ')
+plt. ylabel ('J(w,b)')
+plt. title ('Plot-of J(w,b)_and-iter ation number ')
+plt. savefig ( fig)
+" training -J(w,b)")
+" testing J(w, b)")
+'missclass-gradient.png
+300)
+fig
+plt. figure (dpi
+plt . plot ( miss-train , label
+plt . plot ( miss-test,
+plt. legend ()
+plt. xlabel ('iteration number ')
+plt. ylabel ('misclassification error')
+plt. title ('Plotof misclassification error anditeration number )
+plt. savefig (fig)
+" training")
+" testing")
+label
+###
+# Part c.
+###
+batch =
+Stochastic Gradient Descent with bach size =
+1
+step
+0.01
+21
+
+
+Page 22
+j-train , j-test , miss -train , miss-test , w =
+fig = 'jvalue -sgd.png'
+plt . figure (dpi
+plt . plot (j-train , label =
+plt . plot (j-test,
+plt. legend ()
+plt. xlabel ('iteration number ')
+plt. ylabel ('J(w,b)')
+plt. title ('Plot-of J(w, b)-and-iter ation number ')
+plt. savefig ( fig)
+sgd (tuning , step, x-train , y-train , x.test, y-te
+300)
+"training J (w,b)")
+= " testing J(w,b)")
+label
+'missclass-sgd.png
+300)
+fig
+plt. figure (dpi
+plt. plot (miss-train ,
+plt. plot ( miss-test ,
+plt. legend ()
+plt. xlabel ('iteration -number ')
+plt. ylabel ('misclassification error ')
+plt. title (’Plot_of misclassification erroranditeration number )
+plt. savefig ( fig)
+" training")
+testing")
+label
+label
+###
+# Part d. Stochastic Gradient Descent with bach size
+###
+batch
+100
+100
+0.01
+step
+j-train , j-test , miss train , miss-test , w =
+fig
+plt. figure (dpi = 300)
+plt. plot (j-train , label =
+plt . plot (j-test , label
+plt . legend ()
+plt. xlabel ('iteration number ')
+plt. ylabel ('J(w,b)')
+plt. title ('Plot-of J(w,b)-and iteration number ')
+plt. savefig (fig)
+sgd (tuning, step, x-train , y-train , x_test , y-te
+'jvalue sgd100. png'
+" training J (w,b)")
+"testing J (w, b)")
+יר
+'missclass-sgd100.png’
+300)
+fig
+plt. figure (dpi
+plt . plot ( miss-train ,
+plt . plot ( miss-test,
+plt.legend ()
+plt. xlabel ('iteration number')
+plt. ylabel ('misclassification error ')
+plt. title (Plotof misclassification error anditeration „number ')
+plt. savefig ( fig)
+"training")
+= " testing")
+label
+label
+###
+# Part e.
+###
+Newton 's Method
+22

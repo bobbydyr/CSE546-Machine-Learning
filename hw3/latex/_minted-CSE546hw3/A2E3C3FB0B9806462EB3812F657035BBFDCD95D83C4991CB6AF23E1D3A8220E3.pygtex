@@ -1,0 +1,60 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{from} \PYG{n+nn}{mnist} \PYG{k+kn}{import} \PYG{n}{MNIST}
+\PYG{k+kn}{import} \PYG{n+nn}{random}
+
+\PYG{k}{def} \PYG{n+nf}{load\PYGZus{}data}\PYG{p}{(}\PYG{n}{size}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{):}
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Loading Date!\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{mndata} \PYG{o}{=} \PYG{n}{MNIST}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}python\PYGZhy{}mnist/data/\PYGZsq{}}\PYG{p}{)}
+	\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{labels\PYGZus{}train} \PYG{o}{=} \PYG{n+nb}{map}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{,} \PYG{n}{mndata}\PYG{o}{.}\PYG{n}{load\PYGZus{}training}\PYG{p}{())}
+	\PYG{n}{X\PYGZus{}test}\PYG{p}{,} \PYG{n}{labels\PYGZus{}test} \PYG{o}{=} \PYG{n+nb}{map}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{,} \PYG{n}{mndata}\PYG{o}{.}\PYG{n}{load\PYGZus{}testing}\PYG{p}{())}
+	\PYG{n}{X\PYGZus{}train} \PYG{o}{=} \PYG{n}{X\PYGZus{}train} \PYG{o}{/} \PYG{l+m+mf}{255.0}
+	\PYG{n}{X\PYGZus{}test} \PYG{o}{=} \PYG{n}{X\PYGZus{}test} \PYG{o}{/} \PYG{l+m+mf}{255.0}
+	
+	\PYG{k}{if} \PYG{p}{(}\PYG{n}{size} \PYG{o}{!=} \PYG{l+m+mi}{1}\PYG{p}{):}
+		\PYG{k}{return} \PYG{n}{X\PYGZus{}train}\PYG{p}{[:}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{)}\PYG{o}{*}\PYG{n}{size}\PYG{p}{)],} \PYGZbs{}
+		\PYG{n}{labels\PYGZus{}train}\PYG{p}{[:}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{labels\PYGZus{}train}\PYG{p}{)}\PYG{o}{*}\PYG{n}{size}\PYG{p}{)],} \PYGZbs{}
+		\PYG{n}{X\PYGZus{}test}\PYG{p}{[:}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{X\PYGZus{}test}\PYG{p}{)}\PYG{o}{*}\PYG{n}{size}\PYG{p}{)],} \PYGZbs{}
+		\PYG{n}{labels\PYGZus{}test}\PYG{p}{[:}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{labels\PYGZus{}test}\PYG{p}{)}\PYG{o}{*}\PYG{n}{size}\PYG{p}{)]}
+	\PYG{k}{else}\PYG{p}{:}
+		\PYG{k}{return} \PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{labels\PYGZus{}train}\PYG{p}{,} \PYG{n}{X\PYGZus{}test}\PYG{p}{,} \PYG{n}{labels\PYGZus{}test}
+\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{,} \PYG{n}{X\PYGZus{}test}\PYG{p}{,} \PYG{n}{y\PYGZus{}test} \PYG{o}{=} \PYG{n}{load\PYGZus{}data}\PYG{p}{(}\PYG{n}{size}\PYG{o}{=}\PYG{l+m+mf}{0.1}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Load Data Compelete!\PYGZdq{}}\PYG{p}{)}
+
+\PYG{k}{def} \PYG{n+nf}{compute\PYGZus{}cluster}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{centers}\PYG{p}{,} \PYG{n}{k}\PYG{p}{):}
+	\PYG{n}{objective\PYGZus{}value} \PYG{o}{=} \PYG{l+m+mi}{0}
+	\PYG{n}{clusters} \PYG{o}{=} \PYG{p}{[[]} \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{k}\PYG{p}{)]}
+	\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{)):}
+		\PYG{n}{distance\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+		\PYG{k}{for} \PYG{n}{center} \PYG{o+ow}{in} \PYG{n}{centers}\PYG{p}{:}
+			\PYG{n}{norm} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linalg}\PYG{o}{.}\PYG{n}{norm}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{n}{center}\PYG{p}{)}
+			\PYG{n}{distance\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{norm}\PYG{p}{)}
+		\PYG{n}{closesed\PYGZus{}center\PYGZus{}index} \PYG{o}{=} \PYG{n}{distance\PYGZus{}list}\PYG{o}{.}\PYG{n}{index}\PYG{p}{(}\PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{distance\PYGZus{}list}\PYG{p}{))}
+		\PYG{n}{objective\PYGZus{}value} \PYG{o}{+=} \PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{distance\PYGZus{}list}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}
+		\PYG{n}{clusters}\PYG{p}{[}\PYG{n}{closesed\PYGZus{}center\PYGZus{}index}\PYG{p}{]}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}
+	\PYG{k}{return} \PYG{n}{clusters}\PYG{p}{,} \PYG{n}{objective\PYGZus{}value}
+
+\PYG{k}{def} \PYG{n+nf}{compute\PYGZus{}centers}\PYG{p}{(}\PYG{n}{classes}\PYG{p}{):}
+	\PYG{n}{centers} \PYG{o}{=} \PYG{p}{[]}
+	\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{classes}\PYG{p}{)):}
+		\PYG{n}{centers}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{classes}\PYG{p}{[}\PYG{n}{i}\PYG{p}{],} \PYG{n}{axis} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{))}
+	\PYG{k}{return} \PYG{n}{centers}
+
+\PYG{n}{objective\PYGZus{}value\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+
+\PYG{n}{k} \PYG{o}{=} \PYG{l+m+mi}{10}
+\PYG{n}{objs} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{iteration} \PYG{o}{=} \PYG{l+m+mi}{0}
+\PYG{n}{old\PYGZus{}centers} \PYG{o}{=} \PYG{n}{random}\PYG{o}{.}\PYG{n}{sample}\PYG{p}{(}\PYG{n+nb}{list}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{),} \PYG{n}{k}\PYG{p}{)}
+\PYG{n}{new\PYGZus{}centers} \PYG{o}{=} \PYG{n}{random}\PYG{o}{.}\PYG{n}{sample}\PYG{p}{(}\PYG{n+nb}{list}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{),} \PYG{n}{k}\PYG{p}{)}
+\PYG{k}{while} \PYG{o+ow}{not} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array\PYGZus{}equal}\PYG{p}{(}\PYG{n}{old\PYGZus{}centers}\PYG{p}{,} \PYG{n}{new\PYGZus{}centers}\PYG{p}{):}
+	\PYG{n}{iteration} \PYG{o}{+=} \PYG{l+m+mi}{1}
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Iteration: \PYGZdq{}}\PYG{p}{,} \PYG{n}{iteration}\PYG{p}{)}
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}  Compute Clusters \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{old\PYGZus{}centers} \PYG{o}{=} \PYG{n}{new\PYGZus{}centers}
+	\PYG{n}{clusters}\PYG{p}{,} \PYG{n}{objective\PYGZus{}value} \PYG{o}{=} \PYG{n}{compute\PYGZus{}cluster}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{new\PYGZus{}centers}\PYG{p}{,} \PYG{n}{k}\PYG{p}{)}
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}objective\PYGZus{}value: \PYGZdq{}}\PYG{p}{,} \PYG{n}{objective\PYGZus{}value}\PYG{p}{)}
+	\PYG{n}{new\PYGZus{}centers} \PYG{o}{=} \PYG{n}{compute\PYGZus{}centers}\PYG{p}{(}\PYG{n}{clusters}\PYG{p}{)}
+	\PYG{n}{objective\PYGZus{}value\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{objective\PYGZus{}value}\PYG{p}{)}
+\end{Verbatim}

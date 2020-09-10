@@ -1,0 +1,72 @@
+\documentclass{article}
+\usepackage{mathtools}
+\usepackage{pgfplots}
+\usepackage[utf8]{inputenc}
+
+\title{CSE546 HW0 B}
+\author{Bobby Deng | 1663039 | dengy7 }
+\date{March 2020}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+
+
+\begin{document}
+\maketitle
+
+\section*{B.1}
+PDF is:\newline
+\[ 
+f(x) = \begin{cases}
+1, & \text{for $0 < x < 1$} \\
+0, & \text{otherwise.}
+\end{cases} 
+\]
+CDF is:
+\[ F_x(x)=\int_{-\infty}^{x}f(x)dx=x \]
+Let me calculate the PDF of: $Y=Max(X_1,X_2,....,X_n)$, and here we need to use joint probability to compute.
+\[ P(Max(X_1,X_2,....,X_n) = P(X_1\le X,X_2\le X,...,X_{n-1}\le X) \]
+So we have:
+\[ f_Y(x)=n[F_x(x)]^{n-1}f(x)=n(x)^{n-1}*1=n(x)^{n-1} \]
+\[ 
+=\begin{cases}
+nx^{n-1}, & \text{for $0 < x < 1$} \\
+0, & \text{otherwise.}
+\end{cases} 
+\]
+Now we need $E[Y]$, we use mean equation for continuous random variable. 
+\[ E[Y]=\int_0^1xf_M(x)dx=\int_0^1xnx^{n-1}dx=n\int_0^1x^ndx=\frac{n}{n+1} \]
+
+
+\section*{B.2}
+Since, $A\in \rm I\!R^{n \times m}$, and $B\in \rm I\!R^{m \times n}$
+So,
+\begin{equation}
+\begin{split}
+tr(AB) = & \sum_{i=1}^m (AB)_{ii} \\
+& = \sum_{i=1}^m \sum_{j=q}^n A_{i,j}B_{j,i} \\
+& = \sum_{j=1}^n \sum_{i=1}^m B_{j,i}A_{i,j} \\
+& = \sum_{j=1}^n (BA)_{j,j} \\
+& = tr(BA)
+\end{split}
+\end{equation}
+
+\section*{B.3}
+\subsection*{a.}
+When we consider a matrix of d by d, so, \newline
+Max rank: d and Min rank: 1; 
+\subsection*{b.}
+Because V is a b by n matrix, and $v_i$ is none zero vectors, so, \newline
+Max rank: $min(d,n)$, Min rank: 1;
+\subsection*{c.}
+Since A is D by d and $v_i$ is d by 1, so $Av_i$ is D by 1. So, we could know that $(Av_i)^T$ is 1 by D. \newline
+
+So $(Av_i)(Av_i)^T$ is D by D. Then, \newline
+Max rank: D, Min rank: 0.
+\subsection*{d.}
+Since V is d by n, so AV is D by n, so\newline
+For AV, Max: min(d,n), Min is 0.\newline
+If V is rank d, Max: d, Min: 0.
+
+
+\end{document}

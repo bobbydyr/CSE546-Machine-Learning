@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="42e830fd-c1da-4ae9-81ee-22518ad65d73" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/python-mnist" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/A3a.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/A4a.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/A3d.py" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="ProjectId" id="1c1OFPyUwNaFzXya1S8RfMchWVH" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="restartRequiresConfirmation" value="false" />
+  </component>
+  <component name="RunManager" selected="Python.A5b">
+    <configuration name="A3a" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/A3a.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="A5.a" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/A5.a.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="A5b" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/A5b.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="code" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.A5b" />
+        <item itemvalue="Python.A5.a" />
+        <item itemvalue="Python.A3a" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="42e830fd-c1da-4ae9-81ee-22518ad65d73" name="Default Changelist" comment="" />
+      <created>1589692528286</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1589692528286</updated>
+      <workItem from="1589692531960" duration="16564000" />
+      <workItem from="1589772912236" duration="106336000" />
+      <workItem from="1590563020672" duration="6449000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="522" y="123" width="1022" height="977" key="DiffContextDialog" timestamp="1589766875827">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state x="522" y="123" width="1022" height="977" key="DiffContextDialog/0.23.1920.1177@0.23.1920.1177" timestamp="1589766875827" />
+    <state width="1180" height="385" key="GridCell.Tab.0.bottom" timestamp="1589764520514">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state width="1180" height="385" key="GridCell.Tab.0.bottom/0.23.1920.1177@0.23.1920.1177" timestamp="1589764520514" />
+    <state width="1180" height="385" key="GridCell.Tab.0.center" timestamp="1589764520514">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state width="1180" height="385" key="GridCell.Tab.0.center/0.23.1920.1177@0.23.1920.1177" timestamp="1589764520514" />
+    <state width="1180" height="385" key="GridCell.Tab.0.left" timestamp="1589764520513">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state width="1180" height="385" key="GridCell.Tab.0.left/0.23.1920.1177@0.23.1920.1177" timestamp="1589764520513" />
+    <state width="1180" height="385" key="GridCell.Tab.0.right" timestamp="1589764520514">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state width="1180" height="385" key="GridCell.Tab.0.right/0.23.1920.1177@0.23.1920.1177" timestamp="1589764520514" />
+    <state width="1180" height="385" key="GridCell.Tab.1.bottom" timestamp="1589764520516">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state width="1180" height="385" key="GridCell.Tab.1.bottom/0.23.1920.1177@0.23.1920.1177" timestamp="1589764520516" />
+    <state width="1180" height="385" key="GridCell.Tab.1.center" timestamp="1589764520515">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state width="1180" height="385" key="GridCell.Tab.1.center/0.23.1920.1177@0.23.1920.1177" timestamp="1589764520515" />
+    <state width="1180" height="385" key="GridCell.Tab.1.left" timestamp="1589764520515">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state width="1180" height="385" key="GridCell.Tab.1.left/0.23.1920.1177@0.23.1920.1177" timestamp="1589764520515" />
+    <state width="1180" height="385" key="GridCell.Tab.1.right" timestamp="1589764520516">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state width="1180" height="385" key="GridCell.Tab.1.right/0.23.1920.1177@0.23.1920.1177" timestamp="1589764520516" />
+    <state width="525" height="588" key="XDebugger.FullValuePopup" timestamp="1590530107759">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state width="525" height="588" key="XDebugger.FullValuePopup/0.23.1920.1177@0.23.1920.1177" timestamp="1590530107759" />
+    <state x="693" y="443" key="com.intellij.ide.util.TipDialog" timestamp="1589772913311">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state x="693" y="443" key="com.intellij.ide.util.TipDialog/0.23.1920.1177@0.23.1920.1177" timestamp="1589772913311" />
+    <state width="600" height="440" key="javadoc.popup" timestamp="1590532500518">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state width="600" height="440" key="javadoc.popup/0.23.1920.1177@0.23.1920.1177" timestamp="1590532500518" />
+    <state x="610" y="346" width="700" height="530" key="recent.locations.popup" timestamp="1590723842393">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state x="610" y="346" width="700" height="530" key="recent.locations.popup/0.23.1920.1177@0.23.1920.1177" timestamp="1590723842393" />
+    <state x="510" y="288" width="670" height="676" key="search.everywhere.popup" timestamp="1590558526303">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state x="510" y="288" width="670" height="676" key="search.everywhere.popup/0.23.1920.1177@0.23.1920.1177" timestamp="1590558526303" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/A3a.py</url>
+          <line>85</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/code$A3a.coverage" NAME="A3a Coverage Results" MODIFIED="1589764276321" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>

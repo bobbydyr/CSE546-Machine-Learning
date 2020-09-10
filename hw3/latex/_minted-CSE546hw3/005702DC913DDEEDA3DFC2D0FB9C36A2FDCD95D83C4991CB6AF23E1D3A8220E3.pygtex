@@ -1,0 +1,297 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{c+c1}{\PYGZsh{} A3.d \PYGZhy{} 1 \PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+
+\PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{300}
+\PYG{c+c1}{\PYGZsh{} np.random.seed(1)}
+
+\PYG{n}{x} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{uniform}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{n}\PYG{p}{)}
+\PYG{n}{y} \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{n}{x}\PYG{p}{)}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{p}{(}\PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))} \PYG{o}{+} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{standard\PYGZus{}normal}\PYG{p}{(}\PYG{n}{n}\PYG{p}{)}
+
+\PYG{k}{def} \PYG{n+nf}{k\PYGZus{}poly}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{z}\PYG{p}{,} \PYG{n}{d}\PYG{p}{):}
+	\PYG{n}{a} \PYG{o}{=} \PYG{n}{x} \PYG{o}{@} \PYG{n}{z}\PYG{o}{.}\PYG{n}{T}
+	\PYG{n}{k} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{+} \PYG{n}{x} \PYG{o}{@} \PYG{n}{z}\PYG{o}{.}\PYG{n}{T}\PYG{p}{)}\PYG{o}{**}\PYG{n}{d}
+	\PYG{k}{return} \PYG{n}{k}
+
+\PYG{n}{error\PYGZus{}validation\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{lamb} \PYG{o}{=} \PYG{l+m+mi}{500}
+\PYG{n}{cv\PYGZus{}size} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{n}\PYG{o}{/}\PYG{l+m+mi}{10}\PYG{p}{)}
+\PYG{n}{lamb\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{d\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+\PYG{k}{for} \PYG{n}{lamb} \PYG{o+ow}{in} \PYG{n+nb}{list}\PYG{p}{(}\PYG{l+m+mi}{500} \PYG{o}{*} \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{**}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{20}\PYG{p}{))):}
+	\PYG{k}{for} \PYG{n}{d} \PYG{o+ow}{in} \PYG{n+nb}{list}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{51}\PYG{p}{)):}
+		\PYG{n}{error\PYGZus{}validation} \PYG{o}{=} \PYG{l+m+mi}{0}
+		\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Lam: \PYGZdq{}}\PYG{p}{,} \PYG{n}{lamb}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}, d: \PYGZdq{}}\PYG{p}{,} \PYG{n}{d}\PYG{p}{)}
+		\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{n}\PYG{p}{,} \PYG{n}{cv\PYGZus{}size}\PYG{p}{):}
+			\PYG{n}{x\PYGZus{}train} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{x}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{n}{i}\PYG{p}{],} \PYG{n}{x}\PYG{p}{[}\PYG{n}{i}\PYG{o}{+}\PYG{n}{cv\PYGZus{}size}\PYG{p}{:}\PYG{n}{n}\PYG{p}{])}
+			\PYG{n}{y\PYGZus{}train} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{y}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{n}{i}\PYG{p}{],} \PYG{n}{y}\PYG{p}{[}\PYG{n}{i}\PYG{o}{+}\PYG{n}{cv\PYGZus{}size}\PYG{p}{:}\PYG{n}{n}\PYG{p}{])}
+			\PYG{n}{x\PYGZus{}validation} \PYG{o}{=} \PYG{n}{x}\PYG{p}{[}\PYG{n}{i}\PYG{p}{:}\PYG{n}{i}\PYG{o}{+}\PYG{n}{cv\PYGZus{}size}\PYG{p}{]}
+			\PYG{n}{y\PYGZus{}validation} \PYG{o}{=} \PYG{n}{y}\PYG{p}{[}\PYG{n}{i}\PYG{p}{:}\PYG{n}{i}\PYG{o}{+}\PYG{n}{cv\PYGZus{}size}\PYG{p}{]}
+			\PYG{n}{K} \PYG{o}{=} \PYG{n}{k\PYGZus{}poly}\PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{p}{[:,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{],} \PYG{n}{x\PYGZus{}train}\PYG{p}{[:,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{],} \PYG{n}{d}\PYG{p}{)}
+			\PYG{n}{alpha} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linalg}\PYG{o}{.}\PYG{n}{pinv}\PYG{p}{(}\PYG{n}{K} \PYG{o}{+} \PYG{n}{lamb}\PYG{p}{)} \PYG{o}{@} \PYG{n}{y\PYGZus{}train}
+			\PYG{c+c1}{\PYGZsh{} in predicted y formula}
+			\PYG{n}{k\PYGZus{}xi\PYGZus{}x} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{+} \PYG{n}{np}\PYG{o}{.}\PYG{n}{multiply}\PYG{p}{(}\PYG{n}{x\PYGZus{}validation}\PYG{p}{,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{repeat}\PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{,} \PYG{p}{:],}
+							\PYG{n}{cv\PYGZus{}size}\PYG{p}{)}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{(}\PYG{l+m+mi}{270}\PYG{p}{,}\PYG{n}{cv\PYGZus{}size}\PYG{p}{)))}\PYG{o}{**}\PYG{n}{d}
+			\PYG{c+c1}{\PYGZsh{} y\PYGZus{}predicted = alpha @ k\PYGZus{}xi\PYGZus{}x.T}
+			\PYG{n}{y\PYGZus{}predicted} \PYG{o}{=} \PYG{n}{alpha}\PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{,} \PYG{p}{:]} \PYG{o}{@} \PYG{n}{k\PYGZus{}xi\PYGZus{}x}
+			\PYG{n}{error\PYGZus{}validation} \PYG{o}{+=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{((}\PYG{n}{y\PYGZus{}predicted} \PYG{o}{\PYGZhy{}} \PYG{n}{y\PYGZus{}validation}\PYG{p}{)}\PYG{o}{.}\PYG{n}{T} \PYG{o}{@} \PYG{p}{(}\PYG{n}{y\PYGZus{}predicted}\PYG{o}{\PYGZhy{}} \PYG{n}{y\PYGZus{}validation}\PYG{p}{))}
+			\PYG{c+c1}{\PYGZsh{} error\PYGZus{}validation = error\PYGZus{}validation[0][0]}
+			\PYG{n}{error\PYGZus{}validation} \PYG{o}{/=} \PYG{n}{n}
+		\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}error\PYGZus{}validation: \PYGZdq{}}\PYG{p}{,} \PYG{n}{error\PYGZus{}validation}\PYG{p}{)}
+		\PYG{n}{error\PYGZus{}validation\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{error\PYGZus{}validation}\PYG{p}{)}
+		\PYG{n}{lamb\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{lamb}\PYG{p}{)}
+		\PYG{n}{d\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{d}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} min\PYGZus{}error = min(error\PYGZus{}validation\PYGZus{}list)}
+\PYG{n}{index\PYGZus{}boostrap\PYGZus{}sample\PYGZus{}min\PYGZus{}error} \PYG{o}{=} \PYG{n}{error\PYGZus{}validation\PYGZus{}list}\PYG{o}{.}\PYG{n}{index}\PYG{p}{(}\PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{error\PYGZus{}validation\PYGZus{}list}\PYG{p}{))}
+\PYG{n}{lamb\PYGZus{}best\PYGZus{}poly} \PYG{o}{=} \PYG{n}{lamb\PYGZus{}list}\PYG{p}{[}\PYG{n}{index\PYGZus{}boostrap\PYGZus{}sample\PYGZus{}min\PYGZus{}error}\PYG{p}{]}
+\PYG{n}{d\PYGZus{}best} \PYG{o}{=} \PYG{n}{d\PYGZus{}list}\PYG{p}{[}\PYG{n}{index\PYGZus{}boostrap\PYGZus{}sample\PYGZus{}min\PYGZus{}error}\PYG{p}{]}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Best lamb: \PYGZdq{}}\PYG{p}{,} \PYG{n}{lamb\PYGZus{}best\PYGZus{}poly}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}, Best d: \PYGZdq{}}\PYG{p}{,} \PYG{n}{d\PYGZus{}best}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Best lamb:  0.003814697265625 , Best d:  40}
+
+\PYG{c+c1}{\PYGZsh{} plots the comparaison}
+\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{seed}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{100}
+\PYG{n}{x\PYGZus{}fine} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n+nb}{list}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{100}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)))} \PYG{o}{/} \PYG{l+m+mi}{100}
+\PYG{n}{y\PYGZus{}fine\PYGZus{}true} \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{n}{x\PYGZus{}fine}\PYG{p}{)}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}
+\PYG{n}{y\PYGZus{}fine\PYGZus{}grid} \PYG{o}{=} \PYG{n}{y\PYGZus{}fine\PYGZus{}true} \PYG{o}{+} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{standard\PYGZus{}normal}\PYG{p}{(}\PYG{n}{n}\PYG{p}{)}
+\PYG{n}{f\PYGZus{}poly\PYGZus{}predicted} \PYG{o}{=} \PYG{p}{[]}
+\PYG{k}{for} \PYG{n}{xi} \PYG{o+ow}{in} \PYG{n}{x\PYGZus{}fine}\PYG{p}{:}
+	\PYG{n}{K} \PYG{o}{=} \PYG{n}{k\PYGZus{}poly}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{p}{[:,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{],} \PYG{n}{x\PYGZus{}fine}\PYG{p}{[:,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{],} \PYG{n}{d\PYGZus{}best}\PYG{p}{)}
+	\PYG{n}{alpha} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linalg}\PYG{o}{.}\PYG{n}{pinv}\PYG{p}{(}\PYG{n}{K} \PYG{o}{+} \PYG{n}{lamb\PYGZus{}best\PYGZus{}poly}\PYG{p}{)} \PYG{o}{@} \PYG{n}{y\PYGZus{}fine\PYGZus{}grid}
+	\PYG{n}{k\PYGZus{}xi\PYGZus{}x} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{+} \PYG{n}{xi} \PYG{o}{*} \PYG{n}{x\PYGZus{}fine}\PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{,} \PYG{p}{:])} \PYG{o}{**} \PYG{n}{d\PYGZus{}best}  \PYG{c+c1}{\PYGZsh{} use this when polynomial kernel}
+	\PYG{n}{y\PYGZus{}predicted} \PYG{o}{=} \PYG{n}{alpha} \PYG{o}{@} \PYG{n}{k\PYGZus{}xi\PYGZus{}x}\PYG{o}{.}\PYG{n}{T}
+	
+	\PYG{n}{f\PYGZus{}poly\PYGZus{}predicted}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{y\PYGZus{}predicted}\PYG{p}{)}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{p}{,} \PYG{n}{y\PYGZus{}fine\PYGZus{}true}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}True\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{p}{,} \PYG{n}{f\PYGZus{}poly\PYGZus{}predicted}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Poly Kernel\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}bo\PYGZsq{}}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Observed\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}/Users/yinruideng/Desktop/senior\PYGZus{}spring/cse546/hw/hw3/latex/plots/A3d\PYGZus{}1\PYGZus{}test.png\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+\PYG{c+c1}{\PYGZsh{} \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{} \PYGZsh{}}
+
+\PYG{n}{B} \PYG{o}{=} \PYG{l+m+mi}{300}
+\PYG{n}{n}\PYG{o}{=}\PYG{l+m+mi}{300}
+\PYG{n}{m} \PYG{o}{=} \PYG{l+m+mi}{1000}
+\PYG{n}{x\PYGZus{}fine} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{x}\PYG{p}{),}\PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{x}\PYG{p}{),}\PYG{l+m+mf}{0.01}\PYG{p}{)}
+\PYG{n}{n\PYGZus{}fine} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{} np.random.seed(10)}
+\PYG{n}{boostrap\PYGZus{}predicted\PYGZus{}poly\PYGZus{}matrix} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{x} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{uniform}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{n}\PYG{p}{)}
+\PYG{n}{y\PYGZus{}true\PYGZus{}sample} \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{n}{x}\PYG{p}{)}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{p}{(}\PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}
+\PYG{n}{y\PYGZus{}observed} \PYG{o}{=} \PYG{n}{y\PYGZus{}true\PYGZus{}sample} \PYG{o}{+} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{(}\PYG{n}{n}\PYG{p}{)}
+
+\PYG{k}{for} \PYG{n}{j} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{B}\PYG{p}{):}
+	\PYG{n}{index\PYGZus{}boostrap\PYGZus{}sample} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{choice}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,}\PYG{n}{n}\PYG{p}{)}
+	\PYG{n}{x\PYGZus{}training} \PYG{o}{=} \PYG{n}{x}\PYG{p}{[}\PYG{n}{index\PYGZus{}boostrap\PYGZus{}sample}\PYG{p}{]}
+	\PYG{n}{y\PYGZus{}training} \PYG{o}{=} \PYG{n}{y\PYGZus{}observed}\PYG{p}{[}\PYG{n}{index\PYGZus{}boostrap\PYGZus{}sample}\PYG{p}{]}
+	\PYG{n}{K} \PYG{o}{=} \PYG{n}{k\PYGZus{}poly}\PYG{p}{(}\PYG{n}{x\PYGZus{}training}\PYG{p}{[:,}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{],}\PYG{n}{x\PYGZus{}training}\PYG{p}{[:,}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{],} \PYG{n}{d\PYGZus{}best}\PYG{p}{)}
+	\PYG{n}{alpha} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linalg}\PYG{o}{.}\PYG{n}{solve}\PYG{p}{((}\PYG{n}{K} \PYG{o}{+} \PYG{n}{lamb\PYGZus{}best\PYGZus{}poly}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{eye}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,} \PYG{n}{n}\PYG{p}{)),} \PYG{n}{y\PYGZus{}training}\PYG{p}{)}
+	\PYG{n}{y\PYGZus{}predicted\PYGZus{}boostrap\PYGZus{}ploy} \PYG{o}{=} \PYG{p}{[]}
+	\PYG{c+c1}{\PYGZsh{} for xi in np.array(list(range(0, 100, 1))) / 100:}
+	\PYG{c+c1}{\PYGZsh{} test}
+	\PYG{n}{K} \PYG{o}{=} \PYG{n}{k\PYGZus{}poly}\PYG{p}{(}\PYG{n}{x\PYGZus{}training}\PYG{p}{[:,}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{],}\PYG{n}{x\PYGZus{}training}\PYG{p}{[:,}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{],} \PYG{n}{d\PYGZus{}best}\PYG{p}{)}
+	\PYG{n}{alpha} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linalg}\PYG{o}{.}\PYG{n}{solve}\PYG{p}{((}\PYG{n}{K} \PYG{o}{+} \PYG{n}{lamb\PYGZus{}best\PYGZus{}poly}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{eye}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,} \PYG{n}{n}\PYG{p}{)),} \PYG{n}{y\PYGZus{}training}\PYG{p}{)}
+	
+	\PYG{k}{for} \PYG{n}{xi} \PYG{o+ow}{in} \PYG{n}{x\PYGZus{}fine}\PYG{p}{:}
+		\PYG{n}{y\PYGZus{}predicted\PYGZus{}boostrap\PYGZus{}ploy}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{((}\PYG{l+m+mi}{1}\PYG{o}{+}\PYG{n}{xi}\PYG{o}{*}\PYG{n}{x\PYGZus{}training}\PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{,:])} \PYG{o}{**} \PYG{n}{d\PYGZus{}best} \PYG{o}{@} \PYG{n}{alpha}\PYG{p}{))}
+	\PYG{n}{boostrap\PYGZus{}predicted\PYGZus{}poly\PYGZus{}matrix}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{y\PYGZus{}predicted\PYGZus{}boostrap\PYGZus{}ploy}\PYG{p}{)}
+\PYG{n}{boostrap\PYGZus{}predicted\PYGZus{}poly\PYGZus{}matrix} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{boostrap\PYGZus{}predicted\PYGZus{}poly\PYGZus{}matrix}\PYG{p}{)}
+
+\PYG{n}{percent\PYGZus{}5\PYGZus{}list\PYGZus{}poly} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{percent\PYGZus{}95\PYGZus{}list\PYGZus{}poly} \PYG{o}{=} \PYG{p}{[]}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{n\PYGZus{}fine}\PYG{p}{):}
+	\PYG{n}{sorted\PYGZus{}xi\PYGZus{}from\PYGZus{}300\PYGZus{}B\PYGZus{}sample} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sort}\PYG{p}{(}\PYG{n}{boostrap\PYGZus{}predicted\PYGZus{}poly\PYGZus{}matrix}\PYG{p}{[:,} \PYG{n}{i}\PYG{p}{])}
+	\PYG{n}{x\PYGZus{}percentile\PYGZus{}5} \PYG{o}{=} \PYG{n}{sorted\PYGZus{}xi\PYGZus{}from\PYGZus{}300\PYGZus{}B\PYGZus{}sample}\PYG{p}{[}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{B} \PYG{o}{*} \PYG{l+m+mf}{0.05}\PYG{p}{)]}
+	\PYG{n}{x\PYGZus{}percentile\PYGZus{}95} \PYG{o}{=} \PYG{n}{sorted\PYGZus{}xi\PYGZus{}from\PYGZus{}300\PYGZus{}B\PYGZus{}sample}\PYG{p}{[}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{B} \PYG{o}{*} \PYG{l+m+mf}{0.95}\PYG{p}{)]}
+	\PYG{n}{percent\PYGZus{}5\PYGZus{}list\PYGZus{}poly}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{x\PYGZus{}percentile\PYGZus{}5}\PYG{p}{)}
+	\PYG{n}{percent\PYGZus{}95\PYGZus{}list\PYGZus{}poly}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{x\PYGZus{}percentile\PYGZus{}95}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} x\PYGZus{}fine = np.array(list(range(0, 100, 1))) / 100}
+\PYG{n}{y\PYGZus{}fine\PYGZus{}true} \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{n}{x\PYGZus{}fine}\PYG{p}{)}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{p}{,} \PYG{n}{y\PYGZus{}fine\PYGZus{}true}\PYG{p}{,} \PYG{n}{label} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}True Model\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n+nb}{list}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{100}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)))} \PYG{o}{/} \PYG{l+m+mi}{100}\PYG{p}{,} \PYG{n}{f\PYGZus{}poly\PYGZus{}predicted}\PYG{p}{,} \PYG{n}{label} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}Poly Kernel Prediction\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{fill\PYGZus{}between}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{p}{,} \PYG{n}{percent\PYGZus{}5\PYGZus{}list\PYGZus{}poly}\PYG{p}{,} \PYG{n}{percent\PYGZus{}95\PYGZus{}list\PYGZus{}poly}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{l+m+mf}{0.4}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}90\PYGZpc{} CI\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y\PYGZus{}observed}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}bo\PYGZsq{}}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{l+m+mf}{0.2}\PYG{p}{,} \PYG{n}{label} \PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Observed data\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylim}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{6}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}/Users/yinruideng/Desktop/senior\PYGZus{}spring/cse546/hw/hw3/latex/plots/A3e\PYGZus{}1\PYGZus{}test.png\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+
+\PYG{c+c1}{\PYGZsh{} A3.d \PYGZhy{} 2}
+
+\PYG{k}{def} \PYG{n+nf}{k\PYGZus{}rbf}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{z}\PYG{p}{,} \PYG{n}{gamma}\PYG{p}{):}
+	\PYG{k}{return} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{gamma}\PYG{o}{*}\PYG{p}{(}\PYG{n}{x}\PYG{o}{\PYGZhy{}}\PYG{n}{z}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{n}{x}\PYG{o}{\PYGZhy{}}\PYG{n}{z}\PYG{p}{))}
+
+\PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{300}
+\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{seed}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n}{cv\PYGZus{}size} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{n}\PYG{o}{/}\PYG{l+m+mi}{10}\PYG{p}{)}
+\PYG{n}{x} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{uniform}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{n}\PYG{p}{)}
+\PYG{n}{y\PYGZus{}true} \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{n}{x}\PYG{p}{)}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{p}{(}\PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}
+\PYG{n}{y} \PYG{o}{=} \PYG{n}{y\PYGZus{}true} \PYG{o}{+} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{(}\PYG{n}{n}\PYG{p}{)}
+\PYG{n}{error\PYGZus{}validation\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{lamb\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{gamma\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{d\PYGZus{}list} \PYG{o}{=}\PYG{p}{[]}
+
+\PYG{n}{lamb} \PYG{o}{=} \PYG{l+m+mi}{1}
+\PYG{k}{for} \PYG{n}{lamb} \PYG{o+ow}{in} \PYG{n+nb}{list}\PYG{p}{(}\PYG{l+m+mi}{500} \PYG{o}{*} \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{**}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{30}\PYG{p}{))):}
+	\PYG{k}{for} \PYG{n}{gamma} \PYG{o+ow}{in} \PYG{n+nb}{list}\PYG{p}{(}\PYG{l+m+mi}{50} \PYG{o}{*} \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{/}\PYG{l+m+mf}{1.1}\PYG{p}{)}\PYG{o}{**}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{30}\PYG{p}{))):}
+		\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Lam: \PYGZdq{}}\PYG{p}{,} \PYG{n}{lamb}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}, gamma: \PYGZdq{}}\PYG{p}{,} \PYG{n}{gamma}\PYG{p}{)}
+		\PYG{n}{error\PYGZus{}validation} \PYG{o}{=} \PYG{l+m+mi}{0}
+		\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{n}\PYG{p}{,} \PYG{n}{cv\PYGZus{}size}\PYG{p}{):}
+			\PYG{n}{x\PYGZus{}train} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{x}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{n}{i}\PYG{p}{],} \PYG{n}{x}\PYG{p}{[}\PYG{n}{i}\PYG{o}{+}\PYG{n}{cv\PYGZus{}size}\PYG{p}{:}\PYG{n}{n}\PYG{p}{])}
+			\PYG{n}{y\PYGZus{}train} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{y}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{n}{i}\PYG{p}{],} \PYG{n}{y}\PYG{p}{[}\PYG{n}{i}\PYG{o}{+}\PYG{n}{cv\PYGZus{}size}\PYG{p}{:}\PYG{n}{n}\PYG{p}{])}
+			\PYG{n}{x\PYGZus{}validation} \PYG{o}{=} \PYG{n}{x}\PYG{p}{[}\PYG{n}{i}\PYG{p}{:}\PYG{n}{i}\PYG{o}{+}\PYG{n}{cv\PYGZus{}size}\PYG{p}{]}
+			\PYG{n}{y\PYGZus{}validation} \PYG{o}{=} \PYG{n}{y}\PYG{p}{[}\PYG{n}{i}\PYG{p}{:}\PYG{n}{i}\PYG{o}{+}\PYG{n}{cv\PYGZus{}size}\PYG{p}{]}
+			\PYG{n}{K} \PYG{o}{=} \PYG{n}{k\PYGZus{}rbf}\PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{p}{[:,}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{],}\PYG{n}{x\PYGZus{}train}\PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{,:],} \PYG{n}{gamma}\PYG{p}{)}
+			\PYG{n}{alpha} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linalg}\PYG{o}{.}\PYG{n}{pinv}\PYG{p}{(}\PYG{n}{K} \PYG{o}{+} \PYG{n}{lamb}\PYG{p}{)} \PYG{o}{@} \PYG{n}{y\PYGZus{}train}
+			\PYG{n}{k\PYGZus{}xi\PYGZus{}x} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{gamma}\PYG{o}{*}\PYG{p}{(}\PYG{n}{x\PYGZus{}validation} \PYG{o}{\PYGZhy{}} \PYG{n}{np}\PYG{o}{.}\PYG{n}{repeat}\PYG{p}{(}\PYG{n}{x\PYGZus{}train}\PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{,:],}
+							\PYG{n}{cv\PYGZus{}size}\PYG{p}{)}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{((}\PYG{n}{n}\PYG{o}{\PYGZhy{}}\PYG{n}{cv\PYGZus{}size}\PYG{p}{,} \PYG{n}{cv\PYGZus{}size}\PYG{p}{)))}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}
+			\PYG{n}{y\PYGZus{}predicted} \PYG{o}{=} \PYG{n}{alpha}\PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{,} \PYG{p}{:]} \PYG{o}{@} \PYG{n}{k\PYGZus{}xi\PYGZus{}x}
+			\PYG{n}{error\PYGZus{}validation} \PYG{o}{+=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{((}\PYG{n}{y\PYGZus{}predicted} \PYG{o}{\PYGZhy{}} \PYG{n}{y\PYGZus{}validation}\PYG{p}{)}\PYG{o}{.}\PYG{n}{T} \PYG{o}{@} \PYG{p}{(}\PYG{n}{y\PYGZus{}predicted}\PYG{o}{\PYGZhy{}} \PYG{n}{y\PYGZus{}validation}\PYG{p}{))}
+		\PYG{n}{error\PYGZus{}validation} \PYG{o}{/=} \PYG{n}{n}
+		\PYG{n}{error\PYGZus{}validation\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{error\PYGZus{}validation}\PYG{p}{)}
+		\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}error\PYGZus{}validation: \PYGZdq{}}\PYG{p}{,} \PYG{n}{error\PYGZus{}validation}\PYG{p}{)}
+		\PYG{n}{lamb\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{lamb}\PYG{p}{)}
+		\PYG{n}{gamma\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{gamma}\PYG{p}{)}
+
+\PYG{n}{min\PYGZus{}error} \PYG{o}{=} \PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{error\PYGZus{}validation\PYGZus{}list}\PYG{p}{)}
+\PYG{n}{index\PYGZus{}boostrap\PYGZus{}sample\PYGZus{}min\PYGZus{}error} \PYG{o}{=} \PYG{n}{error\PYGZus{}validation\PYGZus{}list}\PYG{o}{.}\PYG{n}{index}\PYG{p}{(}\PYG{n}{min\PYGZus{}error}\PYG{p}{)}
+\PYG{n}{lamb\PYGZus{}best\PYGZus{}rbf} \PYG{o}{=} \PYG{n}{lamb\PYGZus{}list}\PYG{p}{[}\PYG{n}{index\PYGZus{}boostrap\PYGZus{}sample\PYGZus{}min\PYGZus{}error}\PYG{p}{]}
+\PYG{n}{gamma\PYGZus{}best} \PYG{o}{=} \PYG{n}{gamma\PYGZus{}list}\PYG{p}{[}\PYG{n}{index\PYGZus{}boostrap\PYGZus{}sample\PYGZus{}min\PYGZus{}error}\PYG{p}{]}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Best gamma for RBF kernel is : \PYGZsq{}}\PYG{p}{,} \PYG{n}{gamma\PYGZus{}best}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Best Lambda for RBF kernel is :\PYGZsq{}}\PYG{p}{,} \PYG{n}{lamb\PYGZus{}best\PYGZus{}rbf}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Best gamma for RBF kernel is :  8.992939495460687}
+\PYG{c+c1}{\PYGZsh{} Best Lambda for RBF kernel is : 1.862645149230957e\PYGZhy{}06}
+\PYG{c+c1}{\PYGZsh{} plots the comparaison}
+\PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{100}
+\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{seed}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{)}
+
+\PYG{n}{x\PYGZus{}fine} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n+nb}{list}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{100}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)))} \PYG{o}{/} \PYG{l+m+mi}{100}
+\PYG{n}{y\PYGZus{}fine\PYGZus{}true} \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{n}{x\PYGZus{}fine}\PYG{p}{)}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}
+\PYG{n}{y\PYGZus{}fine\PYGZus{}grid} \PYG{o}{=} \PYG{n}{y\PYGZus{}fine\PYGZus{}true} \PYG{o}{+} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{standard\PYGZus{}normal}\PYG{p}{(}\PYG{n}{n}\PYG{p}{)}
+
+\PYG{n}{f\PYGZus{}rbf\PYGZus{}predicted} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{K\PYGZus{}rbf} \PYG{o}{=} \PYG{n}{k\PYGZus{}rbf}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{p}{[:,}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{],}\PYG{n}{x\PYGZus{}fine}\PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{,:],} \PYG{n}{gamma\PYGZus{}best}\PYG{p}{)}
+\PYG{n}{alpha} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linalg}\PYG{o}{.}\PYG{n}{solve}\PYG{p}{((}\PYG{n}{K\PYGZus{}rbf} \PYG{o}{+} \PYG{n}{lamb\PYGZus{}best\PYGZus{}rbf}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{eye}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,} \PYG{n}{n}\PYG{p}{)),} \PYG{n}{y\PYGZus{}fine\PYGZus{}grid}\PYG{p}{)}
+\PYG{k}{for} \PYG{n}{xi} \PYG{o+ow}{in} \PYG{n}{x\PYGZus{}fine}\PYG{p}{:}
+	\PYG{n}{f\PYGZus{}rbf\PYGZus{}predicted}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n}{alpha} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{gamma\PYGZus{}best}\PYG{o}{*}\PYG{p}{(}\PYG{n}{xi}\PYG{o}{\PYGZhy{}}\PYG{n}{x\PYGZus{}fine}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)))}
+
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{p}{,} \PYG{n}{y\PYGZus{}fine\PYGZus{}true}\PYG{p}{,} \PYG{n}{label} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}True Model\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{p}{,} \PYG{n}{f\PYGZus{}rbf\PYGZus{}predicted}\PYG{p}{,} \PYG{n}{label} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}RBF Kernel Prediction\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}bo\PYGZsq{}}\PYG{p}{,} \PYG{n}{label} \PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Observed data\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}/Users/yinruideng/Desktop/senior\PYGZus{}spring/cse546/hw/hw3/latex/plots/A3d\PYGZus{}2\PYGZus{}test.png\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+
+\PYG{c+c1}{\PYGZsh{} A3.e2}
+\PYG{n}{B} \PYG{o}{=} \PYG{l+m+mi}{300}
+\PYG{n}{n}\PYG{o}{=}\PYG{l+m+mi}{300}
+\PYG{c+c1}{\PYGZsh{} m=1000}
+\PYG{c+c1}{\PYGZsh{} n\PYGZus{}fine = 100}
+\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{seed}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{)}
+\PYG{n}{boostrap\PYGZus{}predicted\PYGZus{}rbf\PYGZus{}matrix} \PYG{o}{=} \PYG{p}{[]}
+\PYG{c+c1}{\PYGZsh{} x = np.array(list(range(0, 100, 1))) / 100}
+\PYG{n}{x} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{uniform}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{n}\PYG{p}{)}
+\PYG{n}{y\PYGZus{}true\PYGZus{}sample} \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{n}{x}\PYG{p}{)}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{p}{(}\PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}
+\PYG{n}{y\PYGZus{}observed} \PYG{o}{=} \PYG{n}{y\PYGZus{}true\PYGZus{}sample} \PYG{o}{+} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{(}\PYG{n}{n}\PYG{p}{)}
+
+\PYG{k}{for} \PYG{n}{j} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{B}\PYG{p}{):}
+	\PYG{n}{index\PYGZus{}boostrap\PYGZus{}sample} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{choice}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,}\PYG{n}{n}\PYG{p}{)}
+	\PYG{n}{x\PYGZus{}training} \PYG{o}{=} \PYG{n}{x}\PYG{p}{[}\PYG{n}{index\PYGZus{}boostrap\PYGZus{}sample}\PYG{p}{]}
+	\PYG{n}{y\PYGZus{}training} \PYG{o}{=} \PYG{n}{y\PYGZus{}observed}\PYG{p}{[}\PYG{n}{index\PYGZus{}boostrap\PYGZus{}sample}\PYG{p}{]}
+	\PYG{n}{K\PYGZus{}rbf} \PYG{o}{=} \PYG{n}{k\PYGZus{}rbf}\PYG{p}{(}\PYG{n}{x\PYGZus{}training}\PYG{p}{[:,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{],} \PYG{n}{x\PYGZus{}training}\PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{,} \PYG{p}{:],} \PYG{n}{gamma\PYGZus{}best}\PYG{p}{)}
+	\PYG{n}{alpha} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linalg}\PYG{o}{.}\PYG{n}{solve}\PYG{p}{((}\PYG{n}{K\PYGZus{}rbf} \PYG{o}{+} \PYG{n}{lamb\PYGZus{}best\PYGZus{}rbf} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{eye}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,} \PYG{n}{n}\PYG{p}{)),} \PYG{n}{y\PYGZus{}training}\PYG{p}{)}
+	
+	\PYG{n}{y\PYGZus{}predicted\PYGZus{}boostrap\PYGZus{}rbf} \PYG{o}{=} \PYG{p}{[]}
+	\PYG{k}{for} \PYG{n}{xi} \PYG{o+ow}{in} \PYG{n}{x\PYGZus{}fine}\PYG{p}{:}
+		\PYG{c+c1}{\PYGZsh{} k\PYGZus{}xi\PYGZus{}x = np.exp(\PYGZhy{}gamma * (xi \PYGZhy{} x\PYGZus{}training[np.newaxis, :]) ** 2)}
+		\PYG{c+c1}{\PYGZsh{} predicted = k\PYGZus{}xi\PYGZus{}x@alpha}
+		\PYG{n}{y\PYGZus{}predicted\PYGZus{}boostrap\PYGZus{}rbf}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n}{alpha} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{gamma\PYGZus{}best}\PYG{o}{*}\PYG{p}{(}\PYG{n}{xi}\PYG{o}{\PYGZhy{}}\PYG{n}{x\PYGZus{}training}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)))}
+	\PYG{n}{boostrap\PYGZus{}predicted\PYGZus{}rbf\PYGZus{}matrix}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{y\PYGZus{}predicted\PYGZus{}boostrap\PYGZus{}rbf}\PYG{p}{)}
+\PYG{n}{boostrap\PYGZus{}predicted\PYGZus{}rbf\PYGZus{}matrix} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n}{boostrap\PYGZus{}predicted\PYGZus{}rbf\PYGZus{}matrix}\PYG{p}{)}
+
+\PYG{n}{percent\PYGZus{}5\PYGZus{}list\PYGZus{}rbf} \PYG{o}{=} \PYG{p}{[]}
+\PYG{n}{percent\PYGZus{}95\PYGZus{}list\PYGZus{}rbf} \PYG{o}{=} \PYG{p}{[]}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{p}{)):}
+	\PYG{n}{sorted\PYGZus{}xi\PYGZus{}from\PYGZus{}300\PYGZus{}B\PYGZus{}sample} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sort}\PYG{p}{(}\PYG{n}{boostrap\PYGZus{}predicted\PYGZus{}rbf\PYGZus{}matrix}\PYG{p}{[:,} \PYG{n}{i}\PYG{p}{])}
+	\PYG{n}{x\PYGZus{}percentile\PYGZus{}5} \PYG{o}{=} \PYG{n}{sorted\PYGZus{}xi\PYGZus{}from\PYGZus{}300\PYGZus{}B\PYGZus{}sample}\PYG{p}{[}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{B} \PYG{o}{*} \PYG{l+m+mf}{0.05}\PYG{p}{)]}
+	\PYG{n}{x\PYGZus{}percentile\PYGZus{}95} \PYG{o}{=} \PYG{n}{sorted\PYGZus{}xi\PYGZus{}from\PYGZus{}300\PYGZus{}B\PYGZus{}sample}\PYG{p}{[}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{B} \PYG{o}{*} \PYG{l+m+mf}{0.95}\PYG{p}{)]}
+	\PYG{n}{percent\PYGZus{}5\PYGZus{}list\PYGZus{}rbf}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{x\PYGZus{}percentile\PYGZus{}5}\PYG{p}{)}
+	\PYG{n}{percent\PYGZus{}95\PYGZus{}list\PYGZus{}rbf}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{x\PYGZus{}percentile\PYGZus{}95}\PYG{p}{)}
+
+\PYG{n}{x\PYGZus{}fine} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{(}\PYG{n+nb}{list}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{100}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)))} \PYG{o}{/} \PYG{l+m+mi}{100}
+\PYG{n}{y\PYGZus{}fine\PYGZus{}true} \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{n}{x\PYGZus{}fine}\PYG{p}{)}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{p}{,} \PYG{n}{y\PYGZus{}fine\PYGZus{}true}\PYG{p}{,} \PYG{n}{label} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}True Model\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{p}{,} \PYG{n}{f\PYGZus{}rbf\PYGZus{}predicted}\PYG{p}{,} \PYG{n}{label} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}rbf Kernel Prediction\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{fill\PYGZus{}between}\PYG{p}{(}\PYG{n}{x\PYGZus{}fine}\PYG{p}{,} \PYG{n}{percent\PYGZus{}5\PYGZus{}list\PYGZus{}rbf}\PYG{p}{,} \PYG{n}{percent\PYGZus{}95\PYGZus{}list\PYGZus{}rbf}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{l+m+mf}{0.4}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}90\PYGZpc{} CI\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y\PYGZus{}observed}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}bo\PYGZsq{}}\PYG{p}{,} \PYG{n}{alpha}\PYG{o}{=}\PYG{l+m+mf}{0.2}\PYG{p}{,} \PYG{n}{label} \PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Observed data\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylim}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{6}\PYG{p}{,} \PYG{l+m+mi}{6}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}/Users/yinruideng/Desktop/senior\PYGZus{}spring/cse546/hw/hw3/latex/plots/A3e\PYGZus{}2\PYGZus{}test.png\PYGZdq{}}\PYG{p}{)}
+\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+
+
+
+
+
+
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{} A3 e \PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{}                                          A3 e}
+\PYG{c+c1}{\PYGZsh{}}
+\PYG{c+c1}{\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{} A3 e \PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}}
+\PYG{n}{d\PYGZus{}best}\PYG{o}{=}\PYG{l+m+mi}{33}
+
+\PYG{n}{B} \PYG{o}{=} \PYG{l+m+mi}{300}
+\PYG{n}{n}\PYG{o}{=}\PYG{l+m+mi}{300}
+\PYG{n}{m}\PYG{o}{=}\PYG{l+m+mi}{1000}
+\PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{seed}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)}
+\PYG{n}{x} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{uniform}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{m}\PYG{o}{+}\PYG{n}{n}\PYG{p}{)}
+\PYG{n}{y\PYGZus{}true\PYGZus{}sample} \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{n}{x}\PYG{p}{)}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{pi}\PYG{o}{*}\PYG{p}{(}\PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}
+\PYG{n}{y\PYGZus{}observed} \PYG{o}{=} \PYG{n}{y\PYGZus{}true\PYGZus{}sample} \PYG{o}{+} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{randn}\PYG{p}{(}\PYG{n}{m}\PYG{o}{+}\PYG{n}{n}\PYG{p}{)}
+\PYG{n}{error\PYGZus{}difference\PYGZus{}list} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{B}\PYG{p}{)}
+
+\PYG{k}{for} \PYG{n}{j} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{B}\PYG{p}{):}
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}B: \PYGZdq{}}\PYG{p}{,} \PYG{n}{j}\PYG{p}{)}
+	\PYG{n}{index\PYGZus{}boostrap\PYGZus{}sample} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{choice}\PYG{p}{(}\PYG{n}{m}\PYG{o}{+}\PYG{n}{n}\PYG{p}{,}\PYG{n}{m}\PYG{p}{)}
+	\PYG{n}{x\PYGZus{}training} \PYG{o}{=} \PYG{n}{x}\PYG{p}{[}\PYG{n}{index\PYGZus{}boostrap\PYGZus{}sample}\PYG{p}{]}
+	\PYG{n}{y\PYGZus{}training} \PYG{o}{=} \PYG{n}{y\PYGZus{}observed}\PYG{p}{[}\PYG{n}{index\PYGZus{}boostrap\PYGZus{}sample}\PYG{p}{]}
+	\PYG{c+c1}{\PYGZsh{} comput poly kernel}
+	\PYG{n}{K} \PYG{o}{=} \PYG{n}{k\PYGZus{}poly}\PYG{p}{(}\PYG{n}{x\PYGZus{}training}\PYG{p}{[:,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{],} \PYG{n}{x\PYGZus{}training}\PYG{p}{[:,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{],} \PYG{n}{d\PYGZus{}best}\PYG{p}{)}
+	\PYG{n}{alpha} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linalg}\PYG{o}{.}\PYG{n}{pinv}\PYG{p}{(}\PYG{n}{K} \PYG{o}{+} \PYG{n}{lamb\PYGZus{}best\PYGZus{}poly}\PYG{p}{)} \PYG{o}{@} \PYG{n}{y\PYGZus{}training}
+	\PYG{c+c1}{\PYGZsh{} compute rbf kernel}
+	\PYG{n}{K\PYGZus{}rbf} \PYG{o}{=} \PYG{n}{k\PYGZus{}rbf}\PYG{p}{(}\PYG{n}{x\PYGZus{}training}\PYG{p}{[:,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{],} \PYG{n}{x\PYGZus{}training}\PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{,} \PYG{p}{:],} \PYG{n}{gamma\PYGZus{}best}\PYG{p}{)}
+	\PYG{n}{alpha\PYGZus{}rbf} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linalg}\PYG{o}{.}\PYG{n}{solve}\PYG{p}{((}\PYG{n}{K\PYGZus{}rbf} \PYG{o}{+} \PYG{n}{lamb\PYGZus{}best\PYGZus{}rbf} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{eye}\PYG{p}{(}\PYG{n}{m}\PYG{p}{,} \PYG{n}{m}\PYG{p}{)),} \PYG{n}{y\PYGZus{}training}\PYG{p}{)}
+	
+	\PYG{n}{error\PYGZus{}difference} \PYG{o}{=} \PYG{l+m+mi}{0}
+	\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{x\PYGZus{}training}\PYG{p}{)):}
+		\PYG{c+c1}{\PYGZsh{} poly predicted}
+		\PYG{n}{k\PYGZus{}xi\PYGZus{}x} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{+} \PYG{n}{x\PYGZus{}training}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{*} \PYG{n}{x\PYGZus{}training}\PYG{p}{[}\PYG{n}{np}\PYG{o}{.}\PYG{n}{newaxis}\PYG{p}{,} \PYG{p}{:])} \PYG{o}{**} \PYG{n}{d\PYGZus{}best}  \PYG{c+c1}{\PYGZsh{} use this when polynomial kernel}
+		\PYG{n}{y\PYGZus{}predicted} \PYG{o}{=} \PYG{n}{alpha} \PYG{o}{@} \PYG{n}{k\PYGZus{}xi\PYGZus{}x}\PYG{o}{.}\PYG{n}{T}
+		\PYG{c+c1}{\PYGZsh{} rbf predicted}
+		\PYG{n}{y\PYGZus{}predicted\PYGZus{}rbf} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sum}\PYG{p}{(}\PYG{n}{alpha\PYGZus{}rbf} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{gamma\PYGZus{}best}\PYG{o}{*}\PYG{p}{(}\PYG{n}{x\PYGZus{}training}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{\PYGZhy{}}\PYG{n}{x\PYGZus{}training}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}
+		\PYG{c+c1}{\PYGZsh{} error difference}
+		\PYG{n}{error\PYGZus{}difference} \PYG{o}{+=} \PYG{p}{(}\PYG{n}{y\PYGZus{}training}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{n}{y\PYGZus{}predicted}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{n}{y\PYGZus{}training}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{n}{y\PYGZus{}predicted\PYGZus{}rbf}\PYG{p}{)}\PYG{o}{**}\PYG{l+m+mi}{2}
+	\PYG{n}{error\PYGZus{}difference} \PYG{o}{/=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{x\PYGZus{}training}\PYG{p}{)}
+	\PYG{c+c1}{\PYGZsh{} error\PYGZus{}difference\PYGZus{}list.append(error\PYGZus{}difference)}
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}error\PYGZus{}difference: \PYGZdq{}}\PYG{p}{,} \PYG{n}{error\PYGZus{}difference}\PYG{p}{)}
+	\PYG{n}{error\PYGZus{}difference\PYGZus{}list}\PYG{p}{[}\PYG{n}{j}\PYG{p}{]} \PYG{o}{=} \PYG{n}{error\PYGZus{}difference}
+	\PYG{n}{error\PYGZus{}difference\PYGZus{}list} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sort}\PYG{p}{(}\PYG{n}{error\PYGZus{}difference\PYGZus{}list}\PYG{p}{)}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}5\PYGZpc{}: \PYGZdq{}}\PYG{p}{,} \PYG{n}{error\PYGZus{}difference\PYGZus{}list}\PYG{p}{[}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{B} \PYG{o}{*} \PYG{l+m+mf}{0.05}\PYG{p}{)])}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}95\PYGZpc{}: \PYGZdq{}}\PYG{p}{,} \PYG{n}{error\PYGZus{}difference\PYGZus{}list}\PYG{p}{[}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{B} \PYG{o}{*} \PYG{l+m+mf}{0.95}\PYG{p}{)])}
+\end{Verbatim}

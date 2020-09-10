@@ -1,0 +1,124 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{torch}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{from} \PYG{n+nn}{mnist} \PYG{k+kn}{import} \PYG{n}{MNIST}
+
+
+\PYG{k}{if} \PYG{n+nv+vm}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{==} \PYG{l+s+s2}{\PYGZdq{}\PYGZus{}\PYGZus{}main\PYGZus{}\PYGZus{}\PYGZdq{}}\PYG{p}{:}
+	\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{,} \PYG{n}{X\PYGZus{}test}\PYG{p}{,} \PYG{n}{y\PYGZus{}test} \PYG{o}{=} \PYG{n}{load\PYGZus{}data}\PYG{p}{(}\PYG{n}{size}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Load Data Compelete!\PYGZdq{}}\PYG{p}{)}
+	\PYG{c+c1}{\PYGZsh{} convert to tensor}
+	\PYG{n}{dtype} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{FloatTensor}
+	
+	\PYG{n}{X\PYGZus{}train\PYGZus{}} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{tensor}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{dtype}\PYG{o}{=}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{double}\PYG{p}{)}\PYG{o}{.}\PYG{n}{type}\PYG{p}{(}\PYG{n}{dtype}\PYG{p}{)}
+	\PYG{n}{y\PYGZus{}train\PYGZus{}} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{tensor}\PYG{p}{(}\PYG{n}{y\PYGZus{}train}\PYG{p}{,} \PYG{n}{dtype}\PYG{o}{=}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{int64}\PYG{p}{)}
+	
+	\PYG{n}{X\PYGZus{}test\PYGZus{}} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{tensor}\PYG{p}{(}\PYG{n}{X\PYGZus{}test}\PYG{p}{,} \PYG{n}{dtype}\PYG{o}{=}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{double}\PYG{p}{)}\PYG{o}{.}\PYG{n}{type}\PYG{p}{(}\PYG{n}{dtype}\PYG{p}{)}
+	\PYG{n}{y\PYGZus{}test\PYGZus{}} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{tensor}\PYG{p}{(}\PYG{n}{y\PYGZus{}test}\PYG{p}{,} \PYG{n}{dtype}\PYG{o}{=}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{int64}\PYG{p}{)}
+	
+	\PYG{k}{def} \PYG{n+nf}{ReLU}\PYG{p}{(}\PYG{n}{x}\PYG{p}{):}
+		\PYG{k}{return} \PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)} \PYG{o}{*} \PYG{p}{(}\PYG{n}{x} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{)}
+	
+	\PYG{k}{def} \PYG{n+nf}{model}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{w0}\PYG{p}{,} \PYG{n}{w1}\PYG{p}{,} \PYG{n}{b0}\PYG{p}{,} \PYG{n}{b1}\PYG{p}{):}
+		\PYG{k}{return} \PYG{p}{(}\PYG{n}{w1} \PYG{o}{@} \PYG{n}{ReLU}\PYG{p}{(}\PYG{n}{w0} \PYG{o}{@} \PYG{n}{x}\PYG{o}{.}\PYG{n}{T} \PYG{o}{+} \PYG{n}{b0}\PYG{p}{)} \PYG{o}{+} \PYG{n}{b1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{T}
+	
+	\PYG{c+c1}{\PYGZsh{} In this question, use this 2 layers model.}
+	\PYG{k}{def} \PYG{n+nf}{model\PYGZus{}2\PYGZus{}layers}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{w0}\PYG{p}{,} \PYG{n}{w1}\PYG{p}{,} \PYG{n}{w2}\PYG{p}{,} \PYG{n}{b0}\PYG{p}{,} \PYG{n}{b1}\PYG{p}{,} \PYG{n}{b2}\PYG{p}{):}
+		\PYG{k}{return} \PYG{p}{(}\PYG{n}{w2} \PYG{o}{@} \PYG{n}{ReLU}\PYG{p}{(}\PYG{n}{w1} \PYG{o}{@} \PYG{n}{ReLU}\PYG{p}{(}\PYG{n}{w0} \PYG{o}{@} \PYG{n}{x}\PYG{o}{.}\PYG{n}{T} \PYG{o}{+} \PYG{n}{b0}\PYG{p}{)} \PYG{o}{+} \PYG{n}{b1}\PYG{p}{)} \PYG{o}{+} \PYG{n}{b2}\PYG{p}{)}\PYG{o}{.}\PYG{n}{T}
+		
+	\PYG{k}{def} \PYG{n+nf}{alpha}\PYG{p}{(}\PYG{n}{d}\PYG{p}{):}
+		\PYG{k}{return} \PYG{l+m+mi}{1} \PYG{o}{/} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{d}\PYG{p}{)}
+	
+	
+	\PYG{k}{def} \PYG{n+nf}{get\PYGZus{}n\PYGZus{}params}\PYG{p}{(}\PYG{n}{model}\PYG{p}{):}
+	\PYG{n}{pp} \PYG{o}{=} \PYG{l+m+mi}{0}
+	\PYG{k}{for} \PYG{n}{p} \PYG{o+ow}{in} \PYG{n+nb}{list}\PYG{p}{(}\PYG{n}{model}\PYG{o}{.}\PYG{n}{parameters}\PYG{p}{()):}
+	\PYG{n}{nn} \PYG{o}{=} \PYG{l+m+mi}{1}
+	\PYG{k}{for} \PYG{n}{s} \PYG{o+ow}{in} \PYG{n+nb}{list}\PYG{p}{(}\PYG{n}{p}\PYG{o}{.}\PYG{n}{size}\PYG{p}{()):}
+	\PYG{n}{nn} \PYG{o}{=} \PYG{n}{nn} \PYG{o}{*} \PYG{n}{s}
+	\PYG{n}{pp} \PYG{o}{+=} \PYG{n}{nn}
+	\PYG{k}{return} \PYG{n}{pp}
+	\PYG{n}{h0} \PYG{o}{=} \PYG{l+m+mi}{32}
+	\PYG{n}{h1} \PYG{o}{=} \PYG{l+m+mi}{32}
+	\PYG{n}{h2} \PYG{o}{=} \PYG{l+m+mi}{32}
+	\PYG{n}{k} \PYG{o}{=} \PYG{l+m+mi}{10}
+	\PYG{n}{n\PYGZus{}train}\PYG{p}{,} \PYG{n}{d\PYGZus{}train} \PYG{o}{=} \PYG{n}{X\PYGZus{}train}\PYG{o}{.}\PYG{n}{shape}
+	\PYG{n}{w0\PYGZus{}data} \PYG{o}{=} \PYG{p}{(}\PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{)} \PYG{o}{+} \PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{))}\PYG{o}{*}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{rand}\PYG{p}{(}\PYG{n}{h0}\PYG{p}{,} \PYG{n}{d\PYGZus{}train}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{))}\PYG{o}{.}\PYG{n}{type}\PYG{p}{(}\PYG{n}{dtype}\PYG{p}{)}
+	\PYG{n}{w0} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{autograd}\PYG{o}{.}\PYG{n}{Variable}\PYG{p}{(}\PYG{n}{w0\PYGZus{}data}\PYG{p}{,} \PYG{n}{requires\PYGZus{}grad}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+	\PYG{n}{b0\PYGZus{}data} \PYG{o}{=} \PYG{p}{(}\PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{)} \PYG{o}{+} \PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{))}\PYG{o}{*}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{rand}\PYG{p}{(}\PYG{n}{h0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{))}\PYG{o}{.}\PYG{n}{type}\PYG{p}{(}\PYG{n}{dtype}\PYG{p}{)}
+	\PYG{n}{b0} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{autograd}\PYG{o}{.}\PYG{n}{Variable}\PYG{p}{(}\PYG{n}{b0\PYGZus{}data}\PYG{p}{,}\PYG{n}{requires\PYGZus{}grad}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+	\PYG{n}{w1\PYGZus{}data} \PYG{o}{=} \PYG{p}{(}\PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{)} \PYG{o}{+} \PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{))}\PYG{o}{*}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{rand}\PYG{p}{(}\PYG{n}{h1}\PYG{p}{,} \PYG{n}{h0}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{))}\PYG{o}{.}\PYG{n}{type}\PYG{p}{(}\PYG{n}{dtype}\PYG{p}{)}
+	\PYG{n}{n\PYGZus{}test}\PYG{p}{,} \PYG{n}{d\PYGZus{}test} \PYG{o}{=} \PYG{n}{X\PYGZus{}test}\PYG{o}{.}\PYG{n}{shape}
+	\PYG{n}{w1} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{autograd}\PYG{o}{.}\PYG{n}{Variable}\PYG{p}{(}\PYG{n}{w1\PYGZus{}data}\PYG{p}{,}\PYG{n}{requires\PYGZus{}grad}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+	\PYG{n}{b1\PYGZus{}data} \PYG{o}{=} \PYG{p}{(}\PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{)} \PYG{o}{+} \PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{))}\PYG{o}{*}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{rand}\PYG{p}{(}\PYG{n}{h1}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{))}\PYG{o}{.}\PYG{n}{type}\PYG{p}{(}\PYG{n}{dtype}\PYG{p}{)}
+	\PYG{n}{b1} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{autograd}\PYG{o}{.}\PYG{n}{Variable}\PYG{p}{(}\PYG{n}{b1\PYGZus{}data}\PYG{p}{,} \PYG{n}{requires\PYGZus{}grad}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+	
+	\PYG{n}{w2\PYGZus{}data} \PYG{o}{=} \PYG{p}{(}\PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{)} \PYG{o}{+} \PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{))}\PYG{o}{*}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{rand}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,} \PYG{n}{h2}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{))}\PYG{o}{.}\PYG{n}{type}\PYG{p}{(}\PYG{n}{dtype}\PYG{p}{)}
+	\PYG{n}{n\PYGZus{}test}\PYG{p}{,} \PYG{n}{d\PYGZus{}test} \PYG{o}{=} \PYG{n}{X\PYGZus{}test}\PYG{o}{.}\PYG{n}{shape}
+	\PYG{n}{w2} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{autograd}\PYG{o}{.}\PYG{n}{Variable}\PYG{p}{(}\PYG{n}{w2\PYGZus{}data}\PYG{p}{,}\PYG{n}{requires\PYGZus{}grad}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+	\PYG{n}{b2\PYGZus{}data} \PYG{o}{=} \PYG{p}{(}\PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{)} \PYG{o}{+} \PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{))}\PYG{o}{*}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{rand}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{\PYGZhy{}}\PYG{n}{alpha}\PYG{p}{(}\PYG{n}{d\PYGZus{}train}\PYG{p}{))}\PYG{o}{.}\PYG{n}{type}\PYG{p}{(}\PYG{n}{dtype}\PYG{p}{)}
+	\PYG{n}{b2} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{autograd}\PYG{o}{.}\PYG{n}{Variable}\PYG{p}{(}\PYG{n}{b2\PYGZus{}data}\PYG{p}{,} \PYG{n}{requires\PYGZus{}grad}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+	
+	\PYG{n}{step\PYGZus{}size} \PYG{o}{=} \PYG{l+m+mf}{0.001}
+	\PYG{n}{epochs} \PYG{o}{=} \PYG{l+m+mi}{150}
+	\PYG{n}{train\PYGZus{}accuracy\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+	\PYG{n}{test\PYGZus{}accuracy\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+	
+	\PYG{n}{optim} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{optim}\PYG{o}{.}\PYG{n}{Adam}\PYG{p}{([}\PYG{n}{w0}\PYG{p}{,} \PYG{n}{w1}\PYG{p}{,} \PYG{n}{w2}\PYG{p}{,} \PYG{n}{b1}\PYG{p}{,} \PYG{n}{b0}\PYG{p}{,} \PYG{n}{b2}\PYG{p}{],} \PYG{n}{lr}\PYG{o}{=}\PYG{n}{step\PYGZus{}size}\PYG{p}{)}
+	
+	\PYG{n}{train\PYGZus{}accu} \PYG{o}{=} \PYG{l+m+mi}{0}
+	\PYG{n}{test\PYGZus{}accu} \PYG{o}{=} \PYG{l+m+mi}{0}
+	\PYG{n}{epochs\PYGZus{}list} \PYG{o}{=} \PYG{n+nb}{list}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{epochs}\PYG{p}{))}
+	\PYG{n}{loss\PYGZus{}train\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+	\PYG{n}{loss\PYGZus{}test\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+	\PYG{c+c1}{\PYGZsh{} for epoch in epochs\PYGZus{}list:}
+	\PYG{n+nb}{iter} \PYG{o}{=} \PYG{l+m+mi}{0}
+	\PYG{k}{while} \PYG{n}{train\PYGZus{}accu} \PYG{o}{\PYGZlt{}} \PYG{l+m+mf}{0.99}\PYG{p}{:}
+		\PYG{n+nb}{iter} \PYG{o}{+=} \PYG{l+m+mi}{1}
+		\PYG{c+c1}{\PYGZsh{} print(\PYGZdq{}Epoch: \PYGZdq{}, epoch)}
+		\PYG{n}{optim}\PYG{o}{.}\PYG{n}{zero\PYGZus{}grad}\PYG{p}{()}
+		\PYG{n}{y\PYGZus{}hat} \PYG{o}{=} \PYG{n}{model\PYGZus{}2\PYGZus{}layers}\PYG{p}{(}\PYG{n}{X\PYGZus{}train\PYGZus{}}\PYG{p}{,} \PYG{n}{w0}\PYG{p}{,} \PYG{n}{w1}\PYG{p}{,} \PYG{n}{w2}\PYG{p}{,} \PYG{n}{b0}\PYG{p}{,} \PYG{n}{b1}\PYG{p}{,} \PYG{n}{b2}\PYG{p}{)}
+		\PYG{n}{y\PYGZus{}hat\PYGZus{}index} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{max}\PYG{p}{(}\PYG{n}{y\PYGZus{}hat}\PYG{p}{,} \PYG{n}{dim}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}\PYG{o}{.}\PYG{n}{indices}
+		\PYG{n}{loss} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{cross\PYGZus{}entropy}\PYG{p}{(}\PYG{n}{y\PYGZus{}hat}\PYG{p}{,} \PYG{n}{y\PYGZus{}train\PYGZus{}}\PYG{p}{)}
+		\PYG{n}{loss}\PYG{o}{.}\PYG{n}{backward}\PYG{p}{()}
+		\PYG{n}{optim}\PYG{o}{.}\PYG{n}{step}\PYG{p}{()}
+		\PYG{c+c1}{\PYGZsh{} Cross Entropy}
+		\PYG{n}{max\PYGZus{}index\PYGZus{}train} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{max}\PYG{p}{(}\PYG{n}{model\PYGZus{}2\PYGZus{}layers}\PYG{p}{(}\PYG{n}{X\PYGZus{}train\PYGZus{}}\PYG{p}{,}
+		\PYG{n}{w0}\PYG{p}{,} \PYG{n}{w1}\PYG{p}{,} \PYG{n}{w2}\PYG{p}{,} \PYG{n}{b0}\PYG{p}{,} \PYG{n}{b1}\PYG{p}{,} \PYG{n}{b2}\PYG{p}{),} \PYG{n}{dim}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{indices}\PYG{o}{.}\PYG{n}{numpy}\PYG{p}{()}
+		\PYG{n}{num\PYGZus{}corrected\PYGZus{}prediction\PYGZus{}train} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{max\PYGZus{}index\PYGZus{}train} \PYG{o}{==} \PYG{n}{y\PYGZus{}train}\PYG{p}{)}
+		\PYG{n}{train\PYGZus{}accu} \PYG{o}{=} \PYG{n}{num\PYGZus{}corrected\PYGZus{}prediction\PYGZus{}train} \PYG{o}{/} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{y\PYGZus{}train}\PYG{p}{)}
+		\PYG{n}{train\PYGZus{}accuracy\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{train\PYGZus{}accu}\PYG{p}{)}
+		\PYG{n}{loss\PYGZus{}train\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{loss}\PYG{p}{)}
+		
+		\PYG{n}{max\PYGZus{}index\PYGZus{}test} \PYG{o}{=} \PYG{n}{torch}\PYG{o}{.}\PYG{n}{max}\PYG{p}{(}\PYG{n}{model\PYGZus{}2\PYGZus{}layers}\PYG{p}{(}\PYG{n}{X\PYGZus{}test\PYGZus{}}\PYG{p}{,}
+		\PYG{n}{w0}\PYG{p}{,} \PYG{n}{w1}\PYG{p}{,} \PYG{n}{w2}\PYG{p}{,} \PYG{n}{b0}\PYG{p}{,} \PYG{n}{b1}\PYG{p}{,} \PYG{n}{b2}\PYG{p}{),} \PYG{n}{dim}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{indices}\PYG{o}{.}\PYG{n}{numpy}\PYG{p}{()}
+		\PYG{n}{num\PYGZus{}corrected\PYGZus{}prediction\PYGZus{}test} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{max\PYGZus{}index\PYGZus{}test} \PYG{o}{==} \PYG{n}{y\PYGZus{}test}\PYG{p}{)}
+		\PYG{n}{test\PYGZus{}accu} \PYG{o}{=} \PYG{n}{num\PYGZus{}corrected\PYGZus{}prediction\PYGZus{}test} \PYG{o}{/} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{y\PYGZus{}test}\PYG{p}{)}
+		\PYG{n}{test\PYGZus{}accuracy\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{test\PYGZus{}accu}\PYG{p}{)}
+		\PYG{n}{loss\PYGZus{}test\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{torch}\PYG{o}{.}\PYG{n}{nn}\PYG{o}{.}\PYG{n}{functional}\PYG{o}{.}\PYG{n}{cross\PYGZus{}entropy}\PYG{p}{(}\PYG{n}{model\PYGZus{}2\PYGZus{}layers}\PYG{p}{(}\PYG{n}{X\PYGZus{}test\PYGZus{}}\PYG{p}{,}
+		\PYG{n}{w0}\PYG{p}{,} \PYG{n}{w1}\PYG{p}{,} \PYG{n}{w2}\PYG{p}{,} \PYG{n}{b0}\PYG{p}{,} \PYG{n}{b1}\PYG{p}{,} \PYG{n}{b2}\PYG{p}{),} \PYG{n}{y\PYGZus{}test\PYGZus{}}\PYG{p}{))}
+		\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZdq{}}\PYG{p}{,} \PYG{n+nb}{iter}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZsh{}\PYGZdq{}}\PYG{p}{)}
+		\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}CROSS ENTROPY:}
+		\PYG{n}{Train} \PYG{n}{Accuracy}\PYG{p}{:} \PYG{l+s+s2}{\PYGZdq{}, train\PYGZus{}accu)}
+		\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}CROSS ENTROPY: Test Accuracy: \PYGZdq{}}\PYG{p}{,} \PYG{n}{test\PYGZus{}accu}\PYG{p}{)}
+		
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}CROSS ENTROPY: Train Accuracy: \PYGZdq{}}\PYG{p}{,} \PYG{n}{train\PYGZus{}accuracy\PYGZus{}list}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])}
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}CROSS ENTROPY: Test Accuracy: \PYGZdq{}}\PYG{p}{,} \PYG{n}{test\PYGZus{}accuracy\PYGZus{}list}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])}
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Train Loss: \PYGZdq{}}\PYG{p}{,} \PYG{n}{loss\PYGZus{}train\PYGZus{}list}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])}
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Test Loss: \PYGZdq{}}\PYG{p}{,} \PYG{n}{loss\PYGZus{}test\PYGZus{}list}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])}
+	
+	
+	
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{iter}\PYG{p}{),} \PYG{n}{train\PYGZus{}accuracy\PYGZus{}list}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}Train Accuracy\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{iter}\PYG{p}{),} \PYG{n}{test\PYGZus{}accuracy\PYGZus{}list}\PYG{p}{,} \PYG{n}{label}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}Test Accuracy\PYGZdq{}}\PYG{p}{)}
+	\PYG{c+c1}{\PYGZsh{} plt.plot(range(iter), loss\PYGZus{}\PYGZus{}train\PYGZus{}list, label=\PYGZdq{}Train Loss\PYGZdq{})}
+	\PYG{c+c1}{\PYGZsh{} plt.plot(range(iter), loss\PYGZus{}\PYGZus{}test\PYGZus{}list, label=\PYGZdq{}Test Loss\PYGZdq{})}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Epochs\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Classification Accuracy \PYGZhy{} Cross Entropy\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{legend}\PYG{p}{()}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}/Users/yinruideng/Desktop/senior\PYGZus{}spring/cse546/hw/hw3/latex/plots/A5b.png\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+	
+	\PYG{c+c1}{\PYGZsh{} w0.shape[0] * w0.shape[1] + w1.shape[0] * w1.shape[1] + w2.shape[0] * w2.shape[1] + len(b0) + len(b1) + len(b2)}
+\end{Verbatim}

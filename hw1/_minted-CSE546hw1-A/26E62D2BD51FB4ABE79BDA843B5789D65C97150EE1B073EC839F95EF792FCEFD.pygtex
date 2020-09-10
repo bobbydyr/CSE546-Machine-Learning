@@ -1,0 +1,42 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{def} \PYG{n+nf}{learningCurve}\PYG{p}{(}\PYG{n}{Xtrain}\PYG{p}{,} \PYG{n}{Ytrain}\PYG{p}{,} \PYG{n}{Xtest}\PYG{p}{,} \PYG{n}{Ytest}\PYG{p}{,} \PYG{n}{reg\PYGZus{}lambda}\PYG{p}{,} \PYG{n}{degree}\PYG{p}{):}
+\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{l+s+sd}{Compute learning curve}
+
+\PYG{l+s+sd}{Arguments:}
+\PYG{l+s+sd}{Xtrain \PYGZhy{}\PYGZhy{} Training X, n\PYGZhy{}by\PYGZhy{}1 matrix}
+\PYG{l+s+sd}{Ytrain \PYGZhy{}\PYGZhy{} Training y, n\PYGZhy{}by\PYGZhy{}1 matrix}
+\PYG{l+s+sd}{Xtest \PYGZhy{}\PYGZhy{} Testing X, m\PYGZhy{}by\PYGZhy{}1 matrix}
+\PYG{l+s+sd}{Ytest \PYGZhy{}\PYGZhy{} Testing Y, m\PYGZhy{}by\PYGZhy{}1 matrix}
+\PYG{l+s+sd}{regLambda \PYGZhy{}\PYGZhy{} regularization factor}
+\PYG{l+s+sd}{degree \PYGZhy{}\PYGZhy{} polynomial degree}
+
+\PYG{l+s+sd}{Returns:}
+\PYG{l+s+sd}{errorTrain \PYGZhy{}\PYGZhy{} errorTrain[i] is the training accuracy using}
+\PYG{l+s+sd}{model trained by Xtrain[0:(i+1)]}
+\PYG{l+s+sd}{errorTest \PYGZhy{}\PYGZhy{} errorTrain[i] is the testing accuracy using}
+\PYG{l+s+sd}{model trained by Xtrain[0:(i+1)]}
+
+\PYG{l+s+sd}{Note:}
+\PYG{l+s+sd}{errorTrain[0:1] and errorTest[0:1] won\PYGZsq{}t actually matter, since we start displaying the learning curve at n = 2 (or higher)}
+\PYG{l+s+sd}{\PYGZdq{}\PYGZdq{}\PYGZdq{}}
+\PYG{n}{n} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{Xtrain}\PYG{p}{)}
+
+\PYG{n}{errorTrain} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{n}\PYG{p}{)}
+\PYG{n}{errorTest} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{n}\PYG{p}{)}
+
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{n}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{):}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}i = \PYGZdq{}}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{} Degree= \PYGZdq{}}\PYG{p}{,} \PYG{n}{degree}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{} lambda: \PYGZdq{}}\PYG{p}{,} \PYG{n}{reg\PYGZus{}lambda}\PYG{p}{)}
+\PYG{n}{model} \PYG{o}{=} \PYG{n}{PolynomialRegression}\PYG{p}{(}\PYG{n}{degree}\PYG{p}{,} \PYG{n}{reg\PYGZus{}lambda}\PYG{p}{)}
+\PYG{n}{model}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{Xtrain}\PYG{p}{[:}\PYG{n}{i}\PYG{p}{],} \PYG{n}{Ytrain}\PYG{p}{[:}\PYG{n}{i}\PYG{p}{])}
+
+\PYG{n}{trainPredicted} \PYG{o}{=} \PYG{n}{model}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{Xtrain}\PYG{p}{[:}\PYG{n}{i}\PYG{p}{])}
+\PYG{n}{singleErrorFromTrain} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{((}\PYG{n}{trainPredicted}\PYG{o}{\PYGZhy{}} \PYG{n}{Ytrain}\PYG{p}{[:}\PYG{n}{i}\PYG{p}{])}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{n}{errorTrain}\PYG{p}{[}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{=} \PYG{n}{singleErrorFromTrain}
+
+\PYG{n}{test\PYGZus{}predicted} \PYG{o}{=} \PYG{n}{model}\PYG{o}{.}\PYG{n}{predict}\PYG{p}{(}\PYG{n}{Xtest}\PYG{p}{[:}\PYG{n}{i}\PYG{p}{])}
+\PYG{n}{singleErrorFromTest} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{((}\PYG{n}{test\PYGZus{}predicted} \PYG{o}{\PYGZhy{}} \PYG{n}{Ytest}\PYG{p}{[:}\PYG{n}{i}\PYG{p}{])}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{n}{errorTest}\PYG{p}{[}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{=} \PYG{n}{singleErrorFromTest}
+
+\PYG{k}{return} \PYG{n}{errorTrain}\PYG{p}{,} \PYG{n}{errorTest}
+\end{Verbatim}

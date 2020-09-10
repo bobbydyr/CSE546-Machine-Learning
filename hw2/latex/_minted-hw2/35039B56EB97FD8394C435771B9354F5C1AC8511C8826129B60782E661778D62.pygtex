@@ -1,0 +1,47 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k+kn}{from} \PYG{n+nn}{A4\PYGZus{}A5\PYGZus{}starter} \PYG{k+kn}{import} \PYG{o}{*}
+
+\PYG{k}{if} \PYG{n+nv+vm}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{==} \PYG{l+s+s1}{\PYGZsq{}\PYGZus{}\PYGZus{}main\PYGZus{}\PYGZus{}\PYGZsq{}}\PYG{p}{:}
+	\PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{500}
+	\PYG{n}{d} \PYG{o}{=} \PYG{l+m+mi}{1000}
+	\PYG{n}{k} \PYG{o}{=} \PYG{l+m+mi}{100}
+	
+	\PYG{n}{X\PYGZus{}train} \PYG{o}{=} \PYG{n}{generate\PYGZus{}x}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,} \PYG{n}{d}\PYG{p}{)}
+	\PYG{n}{y\PYGZus{}train}\PYG{p}{,} \PYG{n}{W\PYGZus{}init} \PYG{o}{=} \PYG{n}{generate\PYGZus{}y}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,} \PYG{n}{d}\PYG{p}{,} \PYG{n}{k}\PYG{p}{,} \PYG{n}{X\PYGZus{}train}\PYG{p}{)}
+	\PYG{n}{lam} \PYG{o}{=} \PYG{n}{compute\PYGZus{}initial\PYGZus{}lamb}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{)[}\PYG{l+m+mi}{0}\PYG{p}{]}
+	\PYG{n}{number\PYGZus{}of\PYGZus{}nonezero\PYGZus{}feature} \PYG{o}{=} \PYG{p}{[]}
+	\PYG{n}{FDR\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+	\PYG{n}{TPR\PYGZus{}list} \PYG{o}{=} \PYG{p}{[]}
+	
+	\PYG{n}{lam\PYGZus{}list} \PYG{o}{=} \PYG{n}{lam} \PYG{o}{*} \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{/}\PYG{l+m+mf}{1.5}\PYG{p}{)} \PYG{o}{**} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{40}\PYG{p}{)}
+	
+	\PYG{k}{for} \PYG{n}{lam} \PYG{o+ow}{in} \PYG{n}{lam\PYGZus{}list}\PYG{p}{:}
+	
+		\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}lam\PYGZdq{}}\PYG{p}{,} \PYG{n}{lam}\PYG{p}{)}
+		\PYG{n}{lasso} \PYG{o}{=} \PYG{n}{Lasso}\PYG{p}{(}\PYG{n}{lam}\PYG{p}{,} \PYG{n}{delta}\PYG{o}{=}\PYG{l+m+mf}{0.001}\PYG{p}{)}
+		\PYG{n}{lasso}\PYG{o}{.}\PYG{n}{coordinate\PYGZus{}descent}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{((}\PYG{n}{d}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)))}
+		\PYG{n}{last\PYGZus{}w} \PYG{o}{=} \PYG{n}{lasso}\PYG{o}{.}\PYG{n}{last\PYGZus{}w}
+		\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Number of coe \PYGZgt{} 0:\PYGZdq{}}\PYG{p}{,} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{last\PYGZus{}w}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{))}
+		\PYG{n}{number\PYGZus{}nonezero} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{last\PYGZus{}w} \PYG{o}{!=} \PYG{l+m+mi}{0}\PYG{p}{)}
+		\PYG{n}{number\PYGZus{}of\PYGZus{}nonezero\PYGZus{}feature}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{number\PYGZus{}nonezero}\PYG{p}{)}
+		
+		\PYG{n}{incorrect\PYGZus{}none\PYGZus{}zero} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{last\PYGZus{}w}\PYG{p}{[}\PYG{n}{W\PYGZus{}init} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{!=} \PYG{l+m+mi}{0}\PYG{p}{)}
+		\PYG{n}{number\PYGZus{}correct\PYGZus{}none\PYGZus{}zero} \PYG{o}{=} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{last\PYGZus{}w}\PYG{p}{[}\PYG{n}{W\PYGZus{}init} \PYG{o}{!=} \PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{!=} \PYG{l+m+mi}{0}\PYG{p}{)}
+		\PYG{k}{if} \PYG{n}{incorrect\PYGZus{}none\PYGZus{}zero} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+			\PYG{n}{FDR} \PYG{o}{=} \PYG{l+m+mi}{0}
+			\PYG{n}{FDR\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{)}
+		\PYG{k}{else}\PYG{p}{:}
+			\PYG{n}{FDR} \PYG{o}{=} \PYG{n}{incorrect\PYGZus{}none\PYGZus{}zero} \PYG{o}{/} \PYG{n}{number\PYGZus{}nonezero}
+			\PYG{n}{FDR\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{FDR}\PYG{p}{)}
+		\PYG{n}{TPR} \PYG{o}{=} \PYG{n}{number\PYGZus{}correct\PYGZus{}none\PYGZus{}zero} \PYG{o}{/} \PYG{n}{k}
+		\PYG{n}{TPR\PYGZus{}list}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{TPR}\PYG{p}{)}
+		
+		\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}FDR: \PYGZdq{}}\PYG{p}{,} \PYG{n}{FDR}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{} TPR: \PYGZdq{}}\PYG{p}{,} \PYG{n}{TPR}\PYG{p}{)}
+	
+	
+	
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{FDR\PYGZus{}list}\PYG{p}{,} \PYG{n}{TPR\PYGZus{}list}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}FDR\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}TPR\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+\end{Verbatim}

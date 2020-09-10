@@ -1,0 +1,50 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k+kn}{import} \PYG{n+nn}{torch}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{from} \PYG{n+nn}{mnist} \PYG{k+kn}{import} \PYG{n}{MNIST}
+\PYG{k+kn}{import} \PYG{n+nn}{random}
+
+\PYG{k}{def} \PYG{n+nf}{load\PYGZus{}data}\PYG{p}{(}\PYG{n}{size}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{):}
+	\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Loading Date!\PYGZdq{}}\PYG{p}{)}
+	\PYG{n}{mndata} \PYG{o}{=} \PYG{n}{MNIST}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}python\PYGZhy{}mnist/data/\PYGZsq{}}\PYG{p}{)}
+	\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{labels\PYGZus{}train} \PYG{o}{=} \PYG{n+nb}{map}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{,} \PYG{n}{mndata}\PYG{o}{.}\PYG{n}{load\PYGZus{}training}\PYG{p}{())}
+	\PYG{n}{X\PYGZus{}test}\PYG{p}{,} \PYG{n}{labels\PYGZus{}test} \PYG{o}{=} \PYG{n+nb}{map}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{,} \PYG{n}{mndata}\PYG{o}{.}\PYG{n}{load\PYGZus{}testing}\PYG{p}{())}
+	\PYG{n}{X\PYGZus{}train} \PYG{o}{=} \PYG{n}{X\PYGZus{}train} \PYG{o}{/} \PYG{l+m+mf}{255.0}
+	\PYG{n}{X\PYGZus{}test} \PYG{o}{=} \PYG{n}{X\PYGZus{}test} \PYG{o}{/} \PYG{l+m+mf}{255.0}
+	
+	\PYG{k}{if} \PYG{p}{(}\PYG{n}{size} \PYG{o}{!=} \PYG{l+m+mi}{1}\PYG{p}{):}
+		\PYG{k}{return} \PYG{n}{X\PYGZus{}train}\PYG{p}{[:}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{)}\PYG{o}{*}\PYG{n}{size}\PYG{p}{)],} \PYGZbs{}
+		\PYG{n}{labels\PYGZus{}train}\PYG{p}{[:}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{labels\PYGZus{}train}\PYG{p}{)}\PYG{o}{*}\PYG{n}{size}\PYG{p}{)],} \PYGZbs{}
+		\PYG{n}{X\PYGZus{}test}\PYG{p}{[:}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{X\PYGZus{}test}\PYG{p}{)}\PYG{o}{*}\PYG{n}{size}\PYG{p}{)],} \PYGZbs{}
+		\PYG{n}{labels\PYGZus{}test}\PYG{p}{[:}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{labels\PYGZus{}test}\PYG{p}{)}\PYG{o}{*}\PYG{n}{size}\PYG{p}{)]}
+	\PYG{k}{else}\PYG{p}{:}
+		\PYG{k}{return} \PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{labels\PYGZus{}train}\PYG{p}{,} \PYG{n}{X\PYGZus{}test}\PYG{p}{,} \PYG{n}{labels\PYGZus{}test}
+\PYG{n}{X\PYGZus{}train}\PYG{p}{,} \PYG{n}{y\PYGZus{}train}\PYG{p}{,} \PYG{n}{X\PYGZus{}test}\PYG{p}{,} \PYG{n}{y\PYGZus{}test} \PYG{o}{=} \PYG{n}{load\PYGZus{}data}\PYG{p}{(}\PYG{n}{size}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Load Data Compelete!\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} A6.a}
+\PYG{n}{n}\PYG{p}{,} \PYG{n}{d} \PYG{o}{=} \PYG{n}{X\PYGZus{}train}\PYG{o}{.}\PYG{n}{shape}
+\PYG{n}{mu} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{(}\PYG{n}{d}\PYG{p}{)}
+\PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{d}\PYG{p}{):}
+	\PYG{n}{mu}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{p}{[:,} \PYG{n}{i}\PYG{p}{])}
+
+\PYG{n}{demean\PYGZus{}X\PYGZus{}train} \PYG{o}{=} \PYG{n}{X\PYGZus{}train}\PYG{p}{[:]}
+\PYG{k}{for} \PYG{n}{row} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{X\PYGZus{}train}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]):}
+	\PYG{n}{demean\PYGZus{}X\PYGZus{}train}\PYG{p}{[}\PYG{n}{row}\PYG{p}{]} \PYG{o}{=} \PYG{n}{X\PYGZus{}train}\PYG{p}{[}\PYG{n}{row}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{n}{mu}
+\PYG{n}{demean\PYGZus{}X\PYGZus{}test} \PYG{o}{=} \PYG{n}{X\PYGZus{}test}\PYG{p}{[:]}
+\PYG{k}{for} \PYG{n}{row} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{X\PYGZus{}test}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]):}
+	\PYG{n}{demean\PYGZus{}X\PYGZus{}test}\PYG{p}{[}\PYG{n}{row}\PYG{p}{]} \PYG{o}{=} \PYG{n}{X\PYGZus{}test}\PYG{p}{[}\PYG{n}{row}\PYG{p}{]} \PYG{o}{\PYGZhy{}} \PYG{n}{mu}
+
+\PYG{n}{sigma} \PYG{o}{=} \PYG{p}{(}\PYG{n}{demean\PYGZus{}X\PYGZus{}train}\PYG{o}{.}\PYG{n}{T} \PYG{o}{@} \PYG{n}{demean\PYGZus{}X\PYGZus{}train}\PYG{p}{)} \PYG{o}{/} \PYG{l+m+mi}{60000}
+
+
+\PYG{n}{U}\PYG{p}{,} \PYG{n}{S}\PYG{p}{,} \PYG{n}{V} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linalg}\PYG{o}{.}\PYG{n}{svd}\PYG{p}{(}\PYG{n}{demean\PYGZus{}X\PYGZus{}train} \PYG{o}{/} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{l+m+mi}{60000}\PYG{p}{),} \PYG{k+kc}{False}\PYG{p}{)}
+\PYG{n}{eigenvalues} \PYG{o}{=} \PYG{n}{S}\PYG{o}{**}\PYG{l+m+mi}{2}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Lambda 1: \PYGZdq{}}\PYG{p}{,} \PYG{n}{eigenvalues}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Lambda 2: \PYGZdq{}}\PYG{p}{,} \PYG{n}{eigenvalues}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Lambda 10: \PYGZdq{}}\PYG{p}{,} \PYG{n}{eigenvalues}\PYG{p}{[}\PYG{l+m+mi}{9}\PYG{p}{])}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Lambda 30: \PYGZdq{}}\PYG{p}{,} \PYG{n}{eigenvalues}\PYG{p}{[}\PYG{l+m+mi}{29}\PYG{p}{])}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Lambda 50: \PYGZdq{}}\PYG{p}{,} \PYG{n}{eigenvalues}\PYG{p}{[}\PYG{l+m+mi}{49}\PYG{p}{])}
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Sum of Lambdas: \PYGZdq{}}\PYG{p}{,} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{eigenvalues}\PYG{p}{))}
+\end{Verbatim}
